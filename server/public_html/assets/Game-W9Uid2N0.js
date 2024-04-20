@@ -1,1 +1,0 @@
-import{u as i,i as s,t as l}from"./index-XWT_Xj9B.js";var m=l("<div>Game<p>id: ");const d=()=>{const e=i();return(()=>{var t=m(),r=t.firstChild,a=r.nextSibling;return a.firstChild,s(a,()=>e.id,null),t})()};export{d as default};
