@@ -1,0 +1,1 @@
+import{b as i,i as l,t as s}from"./index-C82miD7H.js";var n=s("<div>Game<p>id: ");const d=()=>{const{id:r}=i();return(()=>{var t=n(),a=t.firstChild,e=a.nextSibling;return e.firstChild,l(e,r,null),t})()};export{d as default};

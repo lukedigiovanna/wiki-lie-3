@@ -4,6 +4,7 @@ import { join } from "path";
 import { Socket, Server as SocketServer } from "socket.io";
 import dotenv from "dotenv";
 
+import { generateGameUID } from "./constants";
 import { RedisGameClient } from "./RedisGameClient";
 
 dotenv.config();
@@ -59,6 +60,11 @@ io.on("connection", (socket: Socket) => {
     socket.on("register", (clientID: string) => {
         console.log("Client registered with ID: " + clientID);
         redisClient.set(clientID, "connected");
+    });
+
+    socket.on("create-game", () => {
+        console.log("making game");
+        socket.emit("create-game-success", generateGameUID());
     })
 });
 

@@ -35,6 +35,30 @@ The bloat of React has turned me off for some time, so I am going to try using S
 
 ### Express
 
+We use express to manage a node.js backend. Doesn't really do much except serve the `public_html` directory.
+
 ### Socket.io
 
+We use socket.io to manage state synchronization across clients
+
+#### Messages
+
+From Client:
+
+1. `join-game`: `{gameID, clientID}`
+   1. If the game exists, it sends a message back to the client 
+2. `create-game`: 
+3. `choose-article`: `{clientID, articleName}`
+4. `make-guess`: `{clientID}`
+
+From Server:
+
+1. `game-state`: `{<game-info>}`
+   1. Sends an entire object representing the current state of the game a client is in
+   2. Includes all relevant game information (i.e. game settings, whether the game is started, chosen article, host, players, etc.)
+
 ### Redis
+
+The actual state of the game is stored in a redis cache. This enables the server to be stateless and scalable.
+
+Redis has sub-millisecond access, so this works fine.
