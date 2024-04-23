@@ -7,7 +7,7 @@ body {
 }
 
 .action-button {
-    @apply border border-black rounded px-2 py-1 font-bold bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition;
+    @apply border border-black rounded px-5 py-1 font-bold bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition;
 }
 
 /* .popover {

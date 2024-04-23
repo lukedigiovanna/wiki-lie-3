@@ -5,7 +5,7 @@ import { useParams } from "@solidjs/router";
 import { io } from "socket.io-client";
 
 const Game: Component = () => {
-    const params = useParams();
+    const { id } = useParams();
 
     // connect a socket client
     const client = io();
@@ -16,7 +16,7 @@ const Game: Component = () => {
         <div>
             Game
 
-            <p>id: {params.id}</p>
+            <p>id: {id}</p>
         </div>
     </>
 }
