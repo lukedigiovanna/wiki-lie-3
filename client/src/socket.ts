@@ -1,8 +1,13 @@
 import { io, Socket } from "socket.io-client";
+import clientID from "./clientID";
 
 
 class Client {
     private static current: Socket | undefined = undefined;
+
+    static get isConnected() {
+        return Client.current !== undefined;
+    }
 
     static async connect() {
         return await new Promise<void>((resolve, reject) => {
@@ -28,8 +33,6 @@ class Client {
                 reject("Cannot make a request without an active connection");
                 return;
             }
-
-            Client.current.emit("create-game");
             
             Client.current.on("create-game-success", (uid) => {
                 resolve(uid);
@@ -38,7 +41,29 @@ class Client {
             Client.current.on("create-game-failure", (error) => {
                 reject(error);
             });
+
+            Client.current.emit("create-game");
         })
+    }
+
+    static async joinGame(gameID: string, username: string) {
+        return await new Promise<void>((resolve, reject) => {
+            if (!Client.current) {
+                reject("Cannot make a request without an active connection");
+                return;
+            }
+
+            Client.current.on("join-game-success", () => {
+                resolve();
+            });
+
+            Client.current.on("join-game-failure", (error) => {
+                reject(error);
+            });
+
+            console.log("attempting to join game");
+            Client.current.emit("join-game", gameID, clientID, username);
+        });
     }
 }
 

@@ -7,6 +7,7 @@ interface Player {
 }
 
 interface Game {
+    uid: string;
     players: Player[];
     host: number;
     currentArticle: string | null;

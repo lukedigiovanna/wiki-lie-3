@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 import { generateGameUID } from "./constants";
 import { RedisGameClient } from "./RedisGameClient";
 
+import { Game } from "../../shared/models";
+
 dotenv.config();
 
 const port = 3000;
@@ -25,15 +27,15 @@ if (!process.env.REDIS_USERNAME) {
     process.exit();
 }
 if (!process.env.REDIS_PASSWORD) {
-    console.log("Did not find REDIS_USERNAME in .env file");
+    console.log("Did not find REDIS_PASSWORD in .env file");
     process.exit();
 }
 if (!process.env.REDIS_HOST) {
-    console.log("Did not find REDIS_USERNAME in .env file");
+    console.log("Did not find REDIS_HOST in .env file");
     process.exit();
 }
 if (!process.env.REDIS_PORT) {
-    console.log("Did not find REDIS_USERNAME in .env file");
+    console.log("Did not find REDIS_PORT in .env file");
     process.exit();
 }
 
@@ -62,10 +64,31 @@ io.on("connection", (socket: Socket) => {
         redisClient.set(clientID, "connected");
     });
 
-    socket.on("create-game", () => {
+    socket.on("create-game", async () => {
         console.log("making game");
-        socket.emit("create-game-success", generateGameUID());
-    })
+        const gameUID = generateGameUID();
+
+        const gameObject: Game = {
+            uid: gameUID,
+            currentArticle: null,
+            host: 0,
+            inRound: false,
+            players: []
+        };
+
+        try {
+            await redisClient.setGameData(gameUID, gameObject);
+            socket.emit("create-game-success", generateGameUID());
+        }
+        catch (err) {
+            socket.emit("create-game-failure");
+        }
+    });
+
+    socket.on("join-game", (gameID: string, clientID, username: string) => {
+        // check redis for the given gameID
+        socket.emit("join-game-failure", `game with id ${gameID} does not exist`);
+    });
 });
 
 redisClient.connect().then(() => {

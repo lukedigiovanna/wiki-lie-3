@@ -1,3 +1,4 @@
+import { Game } from "@shared/models";
 import { createClient } from "redis";
 
 class RedisGameClient {
@@ -21,6 +22,12 @@ class RedisGameClient {
     async set(key: string, value: any) {
         await this.client.set(key, value);
     }
+    
+    async setGameData(gameUID: string, value: Game) {
+        await this.client.json.set(gameUID, "$", value as any);
+        await this.client.publish(gameUID, "updated-game");
+    }
+
 }
 
 export { RedisGameClient };
