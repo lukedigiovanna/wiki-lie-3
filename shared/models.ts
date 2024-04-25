@@ -1,5 +1,4 @@
 interface Player {
-    socketID: string;
     clientID: string;
     username: string;
     points: 0;

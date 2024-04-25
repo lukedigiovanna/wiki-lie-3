@@ -4,7 +4,6 @@ import { generateGameUID } from "./constants";
 
 class GameManager {
     private games: Map<string, Game> = new Map<string, Game>();
-    private socketToGameID: Map<string, string> = new Map<string, string>(); // maps the socket id to the game they are connected to
     private io: SocketServer;
 
     constructor(io: SocketServer) {
@@ -44,14 +43,12 @@ class GameManager {
         for (const player of game.players) {
             if (player.clientID === clientID) {
                 player.isConnected = true;
-                player.socketID = socketID;
                 this.sendGameUpdate(gameUID);
                 return game; // early return the game, allow the client to reconnect if they wish
             }
         }
         // create a new player with this client
         const newPlayer: Player = {
-            socketID,
             clientID,
             points: 0,
             selectedArticle: null,
@@ -66,18 +63,18 @@ class GameManager {
         return game;
     }
 
-    disconnectSocket(socketID: string) {
-        const gameID = this.socketToGameID.get(socketID);
-        if (gameID) {
-            const game = this.games.get(gameID);
-            if (game) {
-                for (const player of game.players) {
-                    if (socketID === player.socketID) {
-                        player.isConnected = false;
-                        this.sendGameUpdate(gameID);
-                        return;
-                    }
-                }
+    disconnectPlayer(gameID: string, clientID: string) {
+        const game = this.games.get(gameID);
+
+        if (!game) {
+            throw Error("Game not found with id: " + gameID);
+        }
+
+        for (const player of game.players) {
+            if (clientID === player.clientID) {
+                player.isConnected = false;
+                this.sendGameUpdate(gameID);
+                return;
             }
         }
     }

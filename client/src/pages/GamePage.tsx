@@ -26,20 +26,29 @@ const GameView: Component<{game: Game}> = (props: {game: Game}) => {
             <div class="space-y-3">
                 {
                     game().players.map((player: Player) => 
-                    <div class="border border-gray-400 rounded px-20 text-center py-1">
-                        <p class="text-center font-bold">
-                            {player.username} 
-                            {
-                                !player.isConnected && 
-                                <span class="text-red-500">
-                                    (disconnected)
-                                </span>
-                            }
-                        </p>
-                        <p class="italic text-[0.9rem]">
-                            points: {player.points}
-                        </p>
-                    </div>)
+                        <div class="border border-gray-400 rounded px-20 flex flex-row py-1">
+                            <div class="flex-1">
+                                {player.isHost && "H"}
+                            </div>
+                            <div class="flex-1 text-center">
+                                <p class="font-bold">
+                                    {player.username} 
+                                    {
+                                        !player.isConnected && 
+                                        <span class="text-red-500">
+                                            (disconnected)
+                                        </span>
+                                    }
+                                </p>
+                                <p class="italic text-[0.9rem]">
+                                    points: {player.points}
+                                </p>
+                            </div>
+                            <div class="flex-1"> 
+
+                            </div>
+                        </div>
+                    )
                 }
             </div>
         </div>
@@ -50,8 +59,6 @@ const GamePage: Component = () => {
     const { id } = useParams();
 
     const navigate = useNavigate();
-
-    console.log("connecting to room with id", id);
 
     const [gameState, setGameState] = createSignal<Game | undefined>(undefined);
 
@@ -72,6 +79,8 @@ const GamePage: Component = () => {
             navigate("/");
         }
     }
+
+    console.log("connecting to room with id", id);
 
     if (!Client.isConnected) {
         console.log("Oops, it looks like you aren't connected to the socket server, lets try again...")
