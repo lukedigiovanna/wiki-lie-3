@@ -8,6 +8,7 @@ import { generateGameUID } from "./constants";
 import { RedisGameClient } from "./RedisGameClient";
 
 import { Game } from "../../shared/models";
+import GameManager from "./GameManager";
 
 // dotenv.config();
 
@@ -54,28 +55,43 @@ const server = createServer(app);
 
 const io = new SocketServer(server);
 
+const gameManager = new GameManager(io);
+
 io.on("connection", (socket: Socket) => {
+    console.log(socket.id, "connected");
+
     socket.on("disconnect", () => {
         console.log(socket.id, "disconnected");
+        gameManager.disconnectSocket(socket.id);
     });
 
-    socket.on("create-game", async () => {
-        
+    socket.on("create-game", () => {
+        const gameUID = gameManager.createGame();
+        socket.emit("create-game-success", gameUID);
     });
 
-    socket.on("join-game", (gameID: string, clientID, username: string) => {
-        // check redis for the given gameID
-        socket.emit("join-game-failure", `game with id ${gameID} does not exist`);
+    socket.on("join-game", (gameUID: string, clientID: string, username: string) => {
+        try {
+            const game = gameManager.joinGame(gameUID, socket.id, clientID, username);
+            socket.join(gameUID); // join the room to get room updates
+            socket.emit("join-game-success", game);
+        }
+        catch (e: any) {
+            console.log("join failure", e.message);
+            socket.emit("join-game-failure", e.message);
+        }
     });
 });
 
-redisClient.connect().then(() => {
-    // start the server after connecting to redis client
-    console.log("Connected to redis");
-    console.log("Starting server...");
-    server.listen(port, () => {
-        console.log(`Started server on http://localhost:${port}`);
-    });
-})
+server.listen(port, () => {
+    console.log(`Started server on http://localhost:${port}`);
+});
 
-
+// redisClient.connect().then(() => {
+//     // start the server after connecting to redis client
+//     console.log("Connected to redis");
+//     console.log("Starting server...");
+//     server.listen(port, () => {
+//         console.log(`Started server on http://localhost:${port}`);
+//     });
+// })

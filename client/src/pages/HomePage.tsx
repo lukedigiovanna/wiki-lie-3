@@ -1,9 +1,9 @@
 import { createSignal, type Component } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import { useNavigate } from "@solidjs/router";
-import { Client } from "../socket";
+import { Client } from "../Client";
 
-const Home: Component = () => {
+const HomePage: Component = () => {
     const [searchParams, _] = useSearchParams();
 
     const { join } = searchParams;
@@ -31,8 +31,16 @@ const Home: Component = () => {
 
                 <div class="flex justify-center mt-4 space-x-6">
                     {join ? 
-                        <button class="action-button" onClick={() => {
-                            
+                        <button class="action-button" onClick={async () => {
+                            try {
+                                // make a connection to the websocket and then create a game
+                                await Client.connect();
+                                // navigate to this uid (will still need to join the game that has just been created)
+                                navigate(`/game/${join}`);
+                            }
+                            catch (e) {
+                                alert("Error connecting to websocket");
+                            }
                         }}>
                             Join
                         </button>
@@ -84,4 +92,4 @@ const Home: Component = () => {
     </>
 }
 
-export default Home;
+export default HomePage;

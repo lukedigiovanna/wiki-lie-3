@@ -1,17 +1,19 @@
 interface Player {
-    id: string;
+    socketID: string;
+    clientID: string;
     username: string;
     points: 0;
-    connected: false;
     selectedArticle: string | null;
+    isConnected: boolean;
+    isHost: boolean;
 }
 
 interface Game {
     uid: string;
     players: Player[];
-    host: number;
     currentArticle: string | null;
     inRound: boolean;
+    startedRoundTime: number | null;
 }
 
 export { Player, Game };
