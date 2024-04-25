@@ -9,7 +9,7 @@ import { RedisGameClient } from "./RedisGameClient";
 
 import { Game } from "../../shared/models";
 
-dotenv.config();
+// dotenv.config();
 
 const port = 3000;
 
@@ -22,35 +22,35 @@ app.get('*', (req, res) => {
 
 const server = createServer(app);
 
-if (!process.env.REDIS_USERNAME) {
-    console.log("Did not find REDIS_USERNAME in .env file");
-    process.exit();
-}
-if (!process.env.REDIS_PASSWORD) {
-    console.log("Did not find REDIS_PASSWORD in .env file");
-    process.exit();
-}
-if (!process.env.REDIS_HOST) {
-    console.log("Did not find REDIS_HOST in .env file");
-    process.exit();
-}
-if (!process.env.REDIS_PORT) {
-    console.log("Did not find REDIS_PORT in .env file");
-    process.exit();
-}
+// if (!process.env.REDIS_USERNAME) {
+//     console.log("Did not find REDIS_USERNAME in .env file");
+//     process.exit();
+// }
+// if (!process.env.REDIS_PASSWORD) {
+//     console.log("Did not find REDIS_PASSWORD in .env file");
+//     process.exit();
+// }
+// if (!process.env.REDIS_HOST) {
+//     console.log("Did not find REDIS_HOST in .env file");
+//     process.exit();
+// }
+// if (!process.env.REDIS_PORT) {
+//     console.log("Did not find REDIS_PORT in .env file");
+//     process.exit();
+// }
 
-console.log(`REDIS CONFIG:
-"username": ${process.env.REDIS_USERNAME}
-"password": ${process.env.REDIS_PASSWORD}
-"host": ${process.env.REDIS_HOST}:${process.env.REDIS_PORT}
-`)
+// console.log(`REDIS CONFIG:
+// "username": ${process.env.REDIS_USERNAME}
+// "password": ${process.env.REDIS_PASSWORD}
+// "host": ${process.env.REDIS_HOST}:${process.env.REDIS_PORT}
+// `)
 
-const redisClient = new RedisGameClient(
-    process.env.REDIS_USERNAME,
-    process.env.REDIS_PASSWORD,
-    process.env.REDIS_HOST,
-    Number.parseInt(process.env.REDIS_PORT)
-);
+// const redisClient = new RedisGameClient(
+//     process.env.REDIS_USERNAME,
+//     process.env.REDIS_PASSWORD,
+//     process.env.REDIS_HOST,
+//     Number.parseInt(process.env.REDIS_PORT)
+// );
 
 const io = new SocketServer(server);
 
@@ -59,30 +59,8 @@ io.on("connection", (socket: Socket) => {
         console.log(socket.id, "disconnected");
     });
 
-    socket.on("register", (clientID: string) => {
-        console.log("Client registered with ID: " + clientID);
-        redisClient.set(clientID, "connected");
-    });
-
     socket.on("create-game", async () => {
-        console.log("making game");
-        const gameUID = generateGameUID();
-
-        const gameObject: Game = {
-            uid: gameUID,
-            currentArticle: null,
-            host: 0,
-            inRound: false,
-            players: []
-        };
-
-        try {
-            await redisClient.setGameData(gameUID, gameObject);
-            socket.emit("create-game-success", generateGameUID());
-        }
-        catch (err) {
-            socket.emit("create-game-failure");
-        }
+        
     });
 
     socket.on("join-game", (gameID: string, clientID, username: string) => {
