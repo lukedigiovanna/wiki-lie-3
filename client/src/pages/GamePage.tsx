@@ -3,48 +3,9 @@ import { useParams, useNavigate } from "@solidjs/router";
 
 import { Client } from "../Client";
 
-import { Game, Player } from "@shared/models";
-import { createStore } from "solid-js/store";
+import { Game } from "@shared/models";
 
-const GameView: Component<{game: Game}> = (props: {game: Game}) => {
-    const game = () => props.game;
-    
-    return <>
-        <div class="flex-1 border border-gray-200 rounded p-2 flex flex-row justify-center space-x-8 sm:flex-col sm:justify-start sm:space-x-0">
-            <p class="font-bold">
-                Players: {game().players.length}/{3}
-            </p>
-            <p class="font-bold">
-                Ready: {0}/{0}
-            </p>
-            <p>
-                Join link: http://localhost:3000/?join={game().uid}
-            </p>
-        </div>
-
-        <div class="flex sm:flex-row">
-            <div class="space-y-3">
-                {
-                    game().players.map((player: Player) => 
-                    <div class="border border-gray-400 rounded px-20 text-center py-1">
-                        <p class="text-center font-bold">
-                            {player.username} 
-                            {
-                                !player.isConnected && 
-                                <span class="text-red-500">
-                                    (disconnected)
-                                </span>
-                            }
-                        </p>
-                        <p class="italic text-[0.9rem]">
-                            points: {player.points}
-                        </p>
-                    </div>)
-                }
-            </div>
-        </div>
-    </>
-}
+import GameView from "../components/GameView";
 
 const GamePage: Component = () => {
     const { id } = useParams();
