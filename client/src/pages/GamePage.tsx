@@ -49,7 +49,7 @@ const GamePage: Component = () => {
     return <>
         {/* <div class="background"></div> */}
         <div class="block border-black w-full mx-auto sm:w-[75%] py-2 px-14 bg-[#eee] h-[100vh]">
-            <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine]">
+            <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4">
                 Wiki-Lie
             </h1>
             

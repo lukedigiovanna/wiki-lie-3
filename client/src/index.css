@@ -39,11 +39,11 @@ body {
 }
 
 .mw-parser-output p {
-    font-size: 0.875em;
+    font-size: 0.875rem;
     line-height: 1.6;
     display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     color: #202122;
@@ -54,7 +54,7 @@ body {
     font-weight: normal;
     font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
     border-bottom: 1px solid #a2a9b1;
-    padding: 0.2em;
+    padding: 0.2rem;
 }
 
 caption {
@@ -84,16 +84,16 @@ caption {
     border-spacing: 3px;
     background-color: #f8f9fa;
     color: black;
-    margin-top: 0.5em;
+    margin-top: 0.5rem;
     margin-right: 0px;
-    margin-bottom: 0.5em;
-    margin-left: 1em;
-    padding: 0.2em;
+    margin-bottom: 0.5rem;
+    margin-left: 1rem;
+    padding: 0.2rem;
     float: right;
     clear: right;
     font-size: 88%;
-    line-height: 1.5em;
-    width: 22em;
+    line-height: 1.5rem;
+    width: 22rem;
 }
 
 .mw-parser-output a {
@@ -112,7 +112,7 @@ caption {
 }
 
 .toc ul ul {
-    margin-left: 2em;
+    margin-left: 2rem;
 }
 
 .tocnumber {
@@ -134,9 +134,9 @@ caption {
 
 .toc ul {
     list-style: none;
-    margin-top: 0.3em;
+    margin-top: 0.3rem;
     margin-right: 0px;
-    margin-bottom: 0.3em;
+    margin-bottom: 0.3rem;
     margin-left: 0px;
     padding: 0;
 }
@@ -146,7 +146,7 @@ caption {
 }
 
 .mw-parser-output li {
-    margin-bottom: 0.1em;
+    margin-bottom: 0.1rem;
 }
 
 .plainlist ol, .plainlist ul {
@@ -156,8 +156,8 @@ caption {
 
 .mw-parser-output ul, .mw-parser-output ol {
     display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     padding-inline-start: 40px;
@@ -174,7 +174,7 @@ caption {
 }
 
 .mw-parser-output > h2 {
-    margin-bottom: 0.25em;
+    margin-bottom: 0.25rem;
     padding: 0;
     font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
     line-height: 1.3;
@@ -183,8 +183,8 @@ caption {
     margin: 0;
     border-bottom: 1px solid #a2a9b1;
     overflow: hidden;
-    margin-block-start: 0.83em;
-    margin-block-end: 0.83em;
+    margin-block-start: 0.83rem;
+    margin-block-end: 0.83rem;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
@@ -192,11 +192,11 @@ caption {
 .mw-parser-output h3 {
     color: #000;
     margin: 0;
-    padding-top: 0.5em;
+    padding-top: 0.5rem;
     overflow: hidden;
     display: block;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     font-family: sans-serif;
@@ -204,21 +204,21 @@ caption {
 
 .mw-parser-output h4 {
     font-weight: bold;
-    margin-top: 0.3em;
+    margin-top: 0.3rem;
     margin-bottom: 0;
     padding-bottom: 0;
     line-height: 1.6;
-    padding-top: 0.5em;
+    padding-top: 0.5rem;
     overflow: hidden;
     display: block;
-    margin-block-start: 1.33em;
-    margin-block-end: 1.33em;
+    margin-block-start: 1.33rem;
+    margin-block-end: 1.33rem;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
 
 .tright {
-    margin: 0em 0 1.3em 1.4em;
+    margin: 0rem 0 1.3rem 1.4rem;
 }
 
 .tright, .floatright {
@@ -245,20 +245,20 @@ caption {
     text-align: left;
     border: 0;
     font-size: 94%;
-    line-height: 1.4em;
+    line-height: 1.4rem;
     padding: 3px;
 }
 
 .templatequote .templatequotecite {
-    line-height: 1.5em;
+    line-height: 1.5rem;
     text-align: left;
-    padding-left: 1.6em;
+    padding-left: 1.6rem;
     margin-top: 0;
 }
 
 .mw-parser-output cite {
     font-style: inherit;
-    font-size: 0.875em;
+    font-size: 0.875rem;
 }
 
 .thumbcaption {
@@ -276,7 +276,11 @@ caption {
 .tleft {
     float: left;
     clear: left;
-    margin: 0.5em 1.4em 1.3em 0;
+    margin: 0.5rem 1.4rem 1.3rem 0;
+}
+
+.mw-headline {
+    font-size: 1.5rem;
 }
 
 /* .popover {
