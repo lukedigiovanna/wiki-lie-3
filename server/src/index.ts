@@ -60,9 +60,14 @@ const gameManager = new GameManager(io);
 io.on("connection", (socket: Socket) => {
     console.log(socket.id, "connected");
 
+    let _clientID: string | undefined = undefined;
+    let _gameID: string | undefined = undefined;
+
     socket.on("disconnect", () => {
         console.log(socket.id, "disconnected");
-        gameManager.disconnectSocket(socket.id);
+        if (_gameID && _clientID) {
+            gameManager.disconnectPlayer(_gameID, _clientID);
+        }
     });
 
     socket.on("create-game", () => {
@@ -74,6 +79,8 @@ io.on("connection", (socket: Socket) => {
         try {
             const game = gameManager.joinGame(gameUID, socket.id, clientID, username);
             socket.join(gameUID); // join the room to get room updates
+            _clientID = clientID;
+            _gameID = gameUID;
             socket.emit("join-game-success", game);
         }
         catch (e: any) {

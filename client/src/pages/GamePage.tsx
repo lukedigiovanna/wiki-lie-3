@@ -12,8 +12,6 @@ const GamePage: Component = () => {
 
     const navigate = useNavigate();
 
-    console.log("connecting to room with id", id);
-
     const [gameState, setGameState] = createSignal<Game | undefined>(undefined);
 
     const onGameUpdate = (game: Game) => {
@@ -33,6 +31,8 @@ const GamePage: Component = () => {
             navigate("/");
         }
     }
+
+    console.log("connecting to room with id", id);
 
     if (!Client.isConnected) {
         console.log("Oops, it looks like you aren't connected to the socket server, lets try again...")
