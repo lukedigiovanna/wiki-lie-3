@@ -1,7 +1,7 @@
 import { createSignal, type Component } from "solid-js";
 import { useParams, useNavigate } from "@solidjs/router";
 
-import { Game } from "@shared/models";
+import { ErrorCode, Game } from "../../../shared/models";
 
 import { Client } from "../Client";
 import GameView from "../components/GameView";
@@ -13,46 +13,42 @@ const GamePage: Component = () => {
 
     const navigate = useNavigate();
 
-    const [gameState, setGameState] = createSignal<Game | undefined>(undefined);
-
-    const onGameUpdate = (game: Game) => {
-        setGameState(_ => game);
-    }
-
-    const joinGame = async () => {
-        try {
-            const game = await Client.joinGame(id, global.username());
-            Client.onGameUpdate(onGameUpdate);
-            onGameUpdate(game);
-            console.log("joined game", game);
-        }
-        catch (err) {
-            console.log("Couldn't join game\n" + JSON.stringify(err));
-            navigate("/");
-        }
-    }
-
-    const connectAndJoin = () => {
-        Client.connect().then(() => {
-            joinGame();
-        }).catch(err => {
-            alert("Failed to establish socket connection\n" + err);
-        })
-    }
-
+    // if a client came directly to this page instead of from the homepage
+    // if they connected from the home page then we would expect the client to be connected already
+    // this primarily handles the case where a user refreshes their page or comes back to the URL
     if (!Client.isConnected) {
-        connectAndJoin();
+        // attempt to reconnect from this client
+        Client.connect().then(() => {
+            // 
+            Client.rejoinGame(id).then((game) => {
+                global.setGameState(game);
+                Client.onGameUpdate(global.setGameState);
+            }).catch(err => {
+                console.log("Rejoin failed", err);
+                if (err.code === ErrorCode.REJOIN_FAILURE_ALREADY_CONNECTED) {
+                    alert("You are already connected to this game.")
+                    navigate("/");
+                }
+                else if (err.code === ErrorCode.REJOIN_FAILURE_NEVER_CONNECTED) {
+                    navigate(`/?join=${id}`);
+                }
+                else {
+                    console.log("Unknown error occurred");
+                    navigate("/");
+                }
+            });
+        }).catch(err => {
+            console.log("Failed to establish socket connection", err);
+            navigate("/");
+        });
     }
-    else {
-        joinGame();
-    }
-
+    
     window.onfocus = () => {
         // when we come back to this tab we should reestablish the connection
         // this handles a case such as a mobile client leaving their browser, 
         // causing the socket to disconnect, and then when they come back
         // we need to reestablish their connection
-        connectAndJoin();
+        // connectAndJoin();
     }
 
     return <>
@@ -64,10 +60,10 @@ const GamePage: Component = () => {
             
             {
                 (() => {
-                    const game = gameState();
+                    const game = global.gameState();
                     if (!game) {
                         return <>
-                            
+                            Loading...
                         </>
                     }
                     else {

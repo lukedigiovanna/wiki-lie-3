@@ -1,5 +1,5 @@
 import { GameProperty } from "../models";
-import { Player } from "@shared/models";
+import { Player } from "../../../shared/models";
 
 import { Component } from "solid-js";
 

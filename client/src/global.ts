@@ -1,10 +1,10 @@
 import { Article } from "./models";
-import { generateRandomUsername } from "./utils";
+import { Game } from "../../shared/models";
 import { createSignal } from "solid-js";
 
 const [article, setArticle] = createSignal<Article | null>(null);
-const [username, setUsername] = createSignal<string>(generateRandomUsername());
+const [gameState, setGameState] = createSignal<Game | undefined>(undefined);
 
 export default {
-    article, setArticle, username, setUsername
+    article, setArticle, gameState, setGameState
 };

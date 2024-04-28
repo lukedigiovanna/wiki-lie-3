@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import clientID from "./clientID";
 
-import { Game } from "@shared/models";
+import { Game } from "../../shared/models";
 
 class Client {
     private static current: Socket | undefined = undefined;
@@ -14,8 +14,9 @@ class Client {
     static async connect() {
         return await new Promise<void>((resolve, reject) => {
             if (Client.current) { // if we somehow already have a connection
-                Client.current.close(); // then close it
+                Client.disconnect(); // then close it
             }
+
             Client.current = io();
 
             Client.current.on('connect', () => {
@@ -25,13 +26,18 @@ class Client {
     
             Client.current.on('connect_error', (error) => {
                 console.log('Connection failed:', error);
+                Client.disconnect();
                 reject(error);
             });
         });
     }
 
+    static disconnect() {
+        Client.current?.close();
+    }
+
     static async createGame() {
-        return await new Promise((resolve, reject) => {
+        return await new Promise<string>((resolve, reject) => {
             if (!Client.current) {
                 reject("Cannot make a request without an active connection");
                 return;
@@ -71,6 +77,30 @@ class Client {
 
             console.log("attempting to join game");
             Client.current.emit("join-game", gameID, clientID, username);
+        });
+    }
+
+    static async rejoinGame(gameID: string) {
+        return await new Promise<Game>((resolve, reject) => {
+            if (!Client.current) {
+                reject("Cannot make a request without an active connection");
+                return;
+            }
+
+            Client.current.on("rejoin-game-success", (game) => {
+                Client.current!.on("game-update", (game: Game) => {
+                    if (Client.onGameUpdateCallback) {
+                        Client.onGameUpdateCallback(game);
+                    }
+                })
+                resolve(game as Game);
+            });
+
+            Client.current.on("rejoin-game-failure", (error) => {
+                reject(error);
+            });
+
+            Client.current.emit("rejoin-game", gameID, clientID);
         });
     }
 

@@ -4,6 +4,7 @@ import { useNavigate } from "@solidjs/router";
 import { Client } from "../Client";
 
 import global from "../global";
+import { generateRandomUsername } from "../utils";
 
 const HomePage: Component = () => {
     const [searchParams, _] = useSearchParams();
@@ -11,6 +12,15 @@ const HomePage: Component = () => {
     const { join } = searchParams;
 
     const navigate = useNavigate();
+
+    const [username, setUsername] = createSignal("");
+
+    const joinGame = async (gameID: string) => {
+        const game = await Client.joinGame(gameID, username().length === 0 ? generateRandomUsername() : username());
+        global.setGameState(game);
+        Client.onGameUpdate(global.setGameState);
+        navigate(`/game/${gameID}`);
+    }
 
     return <>
         <h1 class="text-center font-bold text-[4rem] text-gray-900 mt-14 font-[Libertine]">
@@ -31,7 +41,7 @@ const HomePage: Component = () => {
                             e.target.classList.add("input-error");
                             setTimeout(() => { e.target.classList.remove("input-error") }, 200);
                         }
-                        global.setUsername(e.target.value);
+                        setUsername(e.target.value);
                     }} 
                 />
 
@@ -41,11 +51,10 @@ const HomePage: Component = () => {
                             try {
                                 // make a connection to the websocket and then create a game
                                 await Client.connect();
-                                // navigate to this uid (will still need to join the game that has just been created)
-                                navigate(`/game/${join}`);
+                                await joinGame(join);
                             }
                             catch (e) {
-                                alert("Error connecting to websocket");
+                                console.log("Error ocurred", e);
                             }
                         }}>
                             Join
@@ -56,11 +65,10 @@ const HomePage: Component = () => {
                                 // make a connection to the websocket and then create a game
                                 await Client.connect();
                                 const uid = await Client.createGame();
-                                // navigate to this uid (will still need to join the game that has just been created)
-                                navigate(`/game/${uid}`);
+                                await joinGame(uid);
                             }
                             catch (e) {
-                                alert("Error connecting to websocket");
+                                console.log("Error ocurred", e);
                             }
                         }}>
                             Host

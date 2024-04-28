@@ -8,6 +8,9 @@ export default defineConfig({
   ],
   build: {
     target: 'esnext',
-    outDir: "../server/public_html"
+    outDir: "../server/public_html",
+    rollupOptions: {
+      external: ['@shared/models']
+    }
   },
 });

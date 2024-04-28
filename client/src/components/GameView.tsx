@@ -1,6 +1,5 @@
-import { Game, Player } from "@shared/models";
-import { Component, createSignal } from "solid-js";
-import { Article, GameProperty } from "../models";
+import { Component } from "solid-js";
+import { GameProperty } from "../models";
 import wikipedia from "../wikipedia";
 
 import GameInfoBar from "./GameInfoBar";

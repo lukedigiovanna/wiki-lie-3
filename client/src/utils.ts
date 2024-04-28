@@ -20,8 +20,4 @@ function generateRandomUsername() {
     return adjective + noun;
 }
 
-for (let i = 0; i < 100; i++) {
-    console.log(generateRandomUsername());
-}
-
 export { generateRandomUsername };

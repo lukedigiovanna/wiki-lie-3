@@ -1,6 +1,7 @@
-import { Game, Player } from "@shared/models";
+import { ErrorCode, Game, Player } from "../../shared/models";
 import { Server as SocketServer } from "socket.io";
 import { generateGameUID } from "./constants";
+import { AppError } from "./AppError";
 
 class GameManager {
     private games: Map<string, Game> = new Map<string, Game>();
@@ -55,17 +56,15 @@ class GameManager {
         return gameUID;
     }
 
-    joinGame(gameUID: string, socketID: string, clientID: string, username: string) {
+    joinGame(gameUID: string, clientID: string, username: string) {
         const game = this.games.get(gameUID);
         if (!game) {
-            throw Error("No game found with UID " + gameUID);
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "No game found with UID " + gameUID);
         }
         // check if this player is already in the game
         for (const player of game.players) {
             if (player.clientID === clientID) {
-                player.isConnected = true;
-                this.sendGameUpdate(gameUID);
-                return game; // early return the game, allow the client to reconnect if they wish
+                throw new AppError(ErrorCode.JOIN_FAILURE_ALREADY_JOINED, "You have already joined this game!");
             }
         }
         // create a new player with this client
@@ -87,13 +86,33 @@ class GameManager {
         return game;
     }
 
+    rejoinGame(gameUID: string, clientID: string) {
+        const game = this.games.get(gameUID);
+        if (!game) {
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "No game found with UID " + gameUID);
+        }
+        for (const player of game.players) {
+            if (player.clientID === clientID) {
+                if (player.isConnected) {
+                    throw new AppError(ErrorCode.REJOIN_FAILURE_ALREADY_CONNECTED, "You are already connected to this game!");
+                }
+                player.isConnected = true;
+                
+                this.sendGameUpdate(gameUID);
+
+                return game;
+            }
+        }
+        throw new AppError(ErrorCode.REJOIN_FAILURE_NEVER_CONNECTED, "Cannot rejoin a game which you have not joined!");
+    }
+
     // merely marks this player as "disconnected"
     // this then opens a pathway for a gamehost to kick the player
     disconnectPlayer(gameID: string, clientID: string) {
         const game = this.games.get(gameID);
 
         if (!game) {
-            throw Error("Game not found with id: " + gameID);
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "Game not found with id: " + gameID);
         }
 
         for (const player of game.players) {

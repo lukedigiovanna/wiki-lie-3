@@ -17,4 +17,13 @@ interface Game {
     startedRoundTime: number | null;
 }
 
-export { Player, Game };
+enum ErrorCode {
+    GAME_NOT_FOUND,
+    JOIN_FAILURE_ALREADY_JOINED,
+    REJOIN_FAILURE_ALREADY_CONNECTED,
+    REJOIN_FAILURE_NEVER_CONNECTED
+}
+
+export type { Player, Game };
+
+export { ErrorCode };

@@ -1,4 +1,4 @@
-import { Game } from "@shared/models";
+import { Game } from "../../shared/models";
 
 interface Article {
     title: string;

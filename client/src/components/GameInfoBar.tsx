@@ -1,4 +1,3 @@
-import { Game } from "@shared/models"
 import { GameProperty } from "../models"
 
 import { Component } from "solid-js"

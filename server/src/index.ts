@@ -2,12 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { join } from "path";
 import { Socket, Server as SocketServer } from "socket.io";
-import dotenv from "dotenv";
 
-import { generateGameUID } from "./constants";
-import { RedisGameClient } from "./RedisGameClient";
-
-import { Game } from "../../shared/models";
 import GameManager from "./GameManager";
 
 // dotenv.config();
@@ -77,7 +72,7 @@ io.on("connection", (socket: Socket) => {
 
     socket.on("join-game", (gameUID: string, clientID: string, username: string) => {
         try {
-            const game = gameManager.joinGame(gameUID, socket.id, clientID, username);
+            const game = gameManager.joinGame(gameUID, clientID, username);
             socket.join(gameUID); // join the room to get room updates
             _clientID = clientID;
             _gameID = gameUID;
@@ -85,7 +80,21 @@ io.on("connection", (socket: Socket) => {
         }
         catch (e: any) {
             console.log("join failure", e.message);
-            socket.emit("join-game-failure", e.message);
+            socket.emit("join-game-failure", {code: e.code, message: e.message});
+        }
+    });
+
+    socket.on("rejoin-game", (gameUID: string, clientID: string) => {
+        try {
+            const game = gameManager.rejoinGame(gameUID, clientID);
+            socket.join(gameUID);
+            _clientID = clientID;
+            _gameID = gameUID;
+            socket.emit("rejoin-game-success", game);
+        }
+        catch (e: any) {
+            console.log("rejoin failure", e.message);
+            socket.emit("rejoin-game-failure", {code: e.code, message: e.message});
         }
     });
 });
