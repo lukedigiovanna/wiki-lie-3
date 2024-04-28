@@ -27,6 +27,27 @@ body {
     @apply border border-black rounded px-6 py-1 font-bold text-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition;
 }
 
+
+@keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-10px);
+    }
+    75% {
+      transform: translateX(10px);
+    }
+}
+
+.input-error {
+    animation: shake 0.2s linear;
+}
+
+.transform-center {
+    transform: translate(-50%,-50%);
+}
+
 .font-wikipedia-title {
     font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
 }

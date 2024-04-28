@@ -17,6 +17,7 @@ class Client {
                 Client.current.close(); // then close it
             }
             Client.current = io();
+
             Client.current.on('connect', () => {
                 console.log('Successfully connected!');
                 resolve();

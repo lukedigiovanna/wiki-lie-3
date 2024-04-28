@@ -1,6 +1,16 @@
+import { Game } from "@shared/models";
+
 interface Article {
     title: string;
     html: string;
 }
 
-export type { Article };
+interface GameProperty {
+    game: Game;
+}
+
+interface ArticleProperty {
+    article: Article | null;
+}
+
+export type { Article, GameProperty, ArticleProperty };

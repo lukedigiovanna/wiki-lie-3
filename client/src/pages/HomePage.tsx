@@ -25,6 +25,12 @@ const HomePage: Component = () => {
                 <input class="rounded px-2 py-1 border border-gray-400 outline-none text-gray-900 shadow-lg shadow-gray-300 focus:border-teal-950 transition" 
                     placeholder="Enter your name" 
                     onInput={e => {
+                        const input = e.target.value;
+                        if (input.length > 15 ||  !input.match(/^[a-zA-Z0-9]*$/)) {
+                            e.target.value = input.substring(0, input.length - 1);
+                            e.target.classList.add("input-error");
+                            setTimeout(() => { e.target.classList.remove("input-error") }, 200);
+                        }
                         setName(e.target.value);
                     }} 
                 />
