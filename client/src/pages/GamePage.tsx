@@ -1,12 +1,12 @@
 import { createSignal, type Component } from "solid-js";
 import { useParams, useNavigate } from "@solidjs/router";
 
-import { Client } from "../Client";
-import { generateRandomUsername } from "../utils";
-
 import { Game } from "@shared/models";
 
+import { Client } from "../Client";
 import GameView from "../components/GameView";
+import global from "../global";
+
 
 const GamePage: Component = () => {
     const { id } = useParams();
@@ -21,7 +21,7 @@ const GamePage: Component = () => {
 
     const joinGame = async () => {
         try {
-            const game = await Client.joinGame(id, generateRandomUsername());
+            const game = await Client.joinGame(id, global.username());
             Client.onGameUpdate(onGameUpdate);
             onGameUpdate(game);
             console.log("joined game", game);

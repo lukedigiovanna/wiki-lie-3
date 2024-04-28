@@ -3,12 +3,12 @@ import { useSearchParams } from "@solidjs/router";
 import { useNavigate } from "@solidjs/router";
 import { Client } from "../Client";
 
+import global from "../global";
+
 const HomePage: Component = () => {
     const [searchParams, _] = useSearchParams();
 
     const { join } = searchParams;
-
-    const [name, setName] = createSignal("");
 
     const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const HomePage: Component = () => {
                             e.target.classList.add("input-error");
                             setTimeout(() => { e.target.classList.remove("input-error") }, 200);
                         }
-                        setName(e.target.value);
+                        global.setUsername(e.target.value);
                     }} 
                 />
 
