@@ -117,13 +117,32 @@ class Client {
 
             Client.current.on("leave-game-success", () => {
                 resolve();
-            })
+            });
 
             Client.current.on("leave-game-failure", (error) => {
                 reject(error);
             });
 
             Client.current.emit("leave-game", gameID, playerID);
+        });
+    }
+
+    static async chooseArticle(gameID: string, playerID: string, articleTitle: string | null) {
+        return await new Promise<void>((resolve, reject) => {
+            if (!Client.current) {
+                reject("Cannot make a request without an active connection");
+                return;
+            }
+
+            Client.current.on("choose-article-success", () => {
+                resolve();
+            });
+
+            Client.current.on("choose-article-failure", (error) => {
+                reject(error);
+            });
+
+            Client.current.emit("choose-article", gameID, playerID, articleTitle);
         });
     }
 

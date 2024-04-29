@@ -7,6 +7,7 @@ import ArticleTitle from "./ArticleTitle";
 
 const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
     const article = () => props.article;
+    const blur = () => props.blur;
 
     return (
         <div class="border border-gray-300 shadow w-full h-[75vh] p-4 rounded overflow-y-scroll">    
@@ -17,7 +18,7 @@ const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
                     <div innerHTML={article()?.html} class="overflow-y-scroll"></div>
                 </>
                 :
-                <div>
+                <div class={`${blur() && "blur-lg"} transition`}>
                     <p class="text-center font-[Libertine] text-[2.5rem] font-bold mb-8">
                         ~ The World Awaits ~
                     </p>

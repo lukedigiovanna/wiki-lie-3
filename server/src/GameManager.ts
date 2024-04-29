@@ -149,6 +149,23 @@ class GameManager {
 
         this.sendGameUpdate(gameID);
     }
+
+    chooseArticle(gameID: string, clientID: string, articleTitle: string | null) {
+        const game = this.games.get(gameID);
+
+        if (!game) {
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "Game not found with id: " + gameID);
+        }
+
+        const playerIndex = game.players.findIndex(player => player.clientID === clientID);
+        if (playerIndex < 0) {
+            throw new AppError(ErrorCode.CHOOSE_ARTICLE_CLIENT_NOT_FOUND, "Cannot choose an article for a player who is not in the game");
+        }
+
+        game.players[playerIndex].selectedArticle = articleTitle;
+
+        this.sendGameUpdate(gameID);
+    }
 }
 
 export default GameManager;

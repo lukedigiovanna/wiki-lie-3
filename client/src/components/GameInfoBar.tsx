@@ -1,6 +1,7 @@
 import { GameProperty } from "../models"
 
 import { Component } from "solid-js"
+import { countReadyPlayers } from "../utils";
 
 const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
     const game = () => props.game;
@@ -11,7 +12,7 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
                 Players: {game().players.length}{game().players.length < 3 && "/3"}
             </p>
             <p class="font-bold">
-                Ready: {0}/{Math.max(2, game().players.length - 1)}
+                Ready: {countReadyPlayers(game())}/{Math.max(2, game().players.length - 1)}
             </p>
         </div>
     )

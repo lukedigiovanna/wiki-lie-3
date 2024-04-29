@@ -9,6 +9,7 @@
 
 body {
     background-color: #eee;
+    height: 100vh;
 }
 
 .background {
@@ -23,8 +24,12 @@ body {
     filter: blur(2px);
 }
 
-.action-button {
+.menu-button {
     @apply border border-black rounded px-6 py-1 font-bold text-lg bg-gray-200 hover:bg-gray-300 active:bg-gray-400 transition;
+}
+
+.action-button {
+    @apply border border-gray-400 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 font-bold text-[0.95rem] px-2 py-1 rounded transition text-gray-800 disabled:hover:bg-gray-200 disabled:opacity-50;
 }
 
 

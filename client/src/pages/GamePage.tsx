@@ -6,6 +6,8 @@ import { ErrorCode } from "../../../shared/models";
 import { Client } from "../Client";
 import GameView from "../components/GameView";
 import global from "../global";
+import clientID from "../clientID";
+import wikipedia from "../wikipedia";
 
 
 const GamePage: Component = () => {
@@ -15,9 +17,14 @@ const GamePage: Component = () => {
 
     const attemptRejoin = () => {
         Client.connect().then(() => {
-            // 
             Client.rejoinGame(id).then((game) => {
                 global.setGameState(game);
+                const us = game.players.find(player => player.clientID === clientID);
+                if (us?.selectedArticle) {
+                    wikipedia.getArticle(us?.selectedArticle).then(article => {
+                        global.setArticle(_ => article);
+                    });
+                }
                 Client.onGameUpdate(global.setGameState);
             }).catch(err => {
                 console.log("Rejoin failed", err);

@@ -108,6 +108,17 @@ io.on("connection", (socket: Socket) => {
             socket.emit("leave-game-failure", {code: e.code, message: e.message});
         }
     });
+
+    socket.on("choose-article", (gameUID: string, clientID: string, articleTitle: string | null) => {
+        try {
+            gameManager.chooseArticle(gameUID, clientID, articleTitle);
+            socket.emit("choose-article-success");
+        }
+        catch (e: any) {
+            console.log("choose-article failure", e.message);
+            socket.emit("choose-article-failure", {code: e.code, message: e.message});
+        }
+    })
 });
 
 server.listen(port, () => {

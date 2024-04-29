@@ -12,6 +12,19 @@ import disconnectedPNG from "../assets/disconnected.png";
 import crownPNG from "../assets/crown.png";
 import { Client } from "../Client";
 
+function getRankColorClass(rank: number) {
+    if (rank === 1) {
+        return "text-[#FFB302]";
+    }
+    if (rank === 2) {
+        return "text-[#c0c0c0]";
+    }
+    if (rank === 3) {
+        return "text-[#CD7F32]";
+    }
+    return "text-gray-700"
+}
+
 const PlayerList: Component<GameProperty> = (props: GameProperty) => {
     const game = () => props.game;
 
@@ -33,7 +46,7 @@ const PlayerList: Component<GameProperty> = (props: GameProperty) => {
                     }}>
                         <div class={`flex flex-row items-center ${player.isConnected ? "opacity-100" : "opacity-50"}`}>
                             <div class="w-12">
-                                <p class="pl-2 text-gray-700 text-[0.9rem] italic">
+                                <p class={`pl-2 ${getRankColorClass(player.rank)} text-[0.9rem] italic ${player.rank <= 3 && "font-bold drop-shadow-md text-[1rem]"}`}>
                                     #{player.rank}
                                 </p>
                             </div>
@@ -45,8 +58,8 @@ const PlayerList: Component<GameProperty> = (props: GameProperty) => {
                                     points: {player.points}
                                 </p>
                             </div>
-                            <div class="w-12">
-                                <img class="w-10 float-end" src={
+                            <div class="w-12 flex justify-center">
+                                <img class={`${game().guesserIndex !== index && player.selectedArticle ? "w-6" : "w-10"} float-end`} src={
                                     game().guesserIndex === index ?
                                         judgePNG
                                     : (player.selectedArticle ? checkGIF : readingGIF)
@@ -55,7 +68,7 @@ const PlayerList: Component<GameProperty> = (props: GameProperty) => {
 
                             {
                                 player.isHost &&
-                                <img src={crownPNG} class="absolute right-[-1.4rem] top-[-1.4rem] w-10 rotate-[30deg]" />
+                                <img src={crownPNG} class="absolute right-[-1.2rem] top-[-1.4rem] w-10 rotate-[30deg]" />
                             }
                         </div>
 

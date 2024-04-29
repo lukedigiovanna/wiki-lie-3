@@ -47,7 +47,7 @@ const HomePage: Component = () => {
 
                 <div class="flex justify-center mt-4 space-x-6">
                     {join ? 
-                        <button class="action-button" onClick={async () => {
+                        <button class="menu-button" onClick={async () => {
                             try {
                                 // make a connection to the websocket and then create a game
                                 await Client.connect();
@@ -60,7 +60,7 @@ const HomePage: Component = () => {
                             Join
                         </button>
                     :   
-                        <button class="action-button" onClick={async () => {
+                        <button class="menu-button" onClick={async () => {
                             try {
                                 // make a connection to the websocket and then create a game
                                 await Client.connect();

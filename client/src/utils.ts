@@ -1,3 +1,5 @@
+import { Game, Player } from "@shared/models";
+
 const adjectives = [
     "quick", "bright", "creative", 
     "sharp", "dynamic", "smooth", 
@@ -20,4 +22,10 @@ function generateRandomUsername() {
     return adjective + noun;
 }
 
-export { generateRandomUsername };
+function countReadyPlayers(game: Game) {
+    return game.players.filter((player: Player, index: number) => 
+            player.selectedArticle !== null && index !== game.guesserIndex
+    ).length;
+}
+
+export { generateRandomUsername, countReadyPlayers };

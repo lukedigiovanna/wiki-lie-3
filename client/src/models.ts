@@ -11,6 +11,7 @@ interface GameProperty {
 
 interface ArticleProperty {
     article: Article | null;
+    blur: boolean;
 }
 
 export type { Article, GameProperty, ArticleProperty };
