@@ -14,9 +14,9 @@ function generateUniqueID() {
 
 const CUID_IDENTIFIER = "_wiki-lie_cuid";
 
-let clientID = window.localStorage.getItem(CUID_IDENTIFIER);
+let clientID: string = window.localStorage.getItem(CUID_IDENTIFIER) || "";
 
-if (!clientID) {
+if (clientID.length === 0) {
     clientID = generateUniqueID();
     console.log("generated new client id:", clientID);
     window.localStorage.setItem(CUID_IDENTIFIER, clientID); 

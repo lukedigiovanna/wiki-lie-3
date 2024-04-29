@@ -1,0 +1,34 @@
+"filename", "language", "TypeScript", "JSON with Comments", "JSON", "JavaScript", "CSS", "TypeScript JSX", "HTML", "Markdown", "comment", "blank", "total"
+"a:\Programming\Games\wiki-lie-3\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 41, 0, 23, 64
+"a:\Programming\Games\wiki-lie-3\client\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 20, 0, 15, 35
+"a:\Programming\Games\wiki-lie-3\client\index.html", "HTML", 0, 0, 0, 0, 0, 0, 15, 0, 0, 2, 17
+"a:\Programming\Games\wiki-lie-3\client\package.json", "JSON", 0, 0, 29, 0, 0, 0, 0, 0, 0, 1, 30
+"a:\Programming\Games\wiki-lie-3\client\postcss.config.js", "JavaScript", 0, 0, 0, 6, 0, 0, 0, 0, 0, 1, 7
+"a:\Programming\Games\wiki-lie-3\client\src\App.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 13, 0, 0, 2, 6, 21
+"a:\Programming\Games\wiki-lie-3\client\src\Client.ts", "TypeScript", 90, 0, 0, 0, 0, 0, 0, 0, 0, 23, 113
+"a:\Programming\Games\wiki-lie-3\client\src\clientID.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 1, 5, 25
+"a:\Programming\Games\wiki-lie-3\client\src\components\ArticleDisplay.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 26, 0, 0, 0, 5, 31
+"a:\Programming\Games\wiki-lie-3\client\src\components\ArticleTitle.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 19, 0, 0, 0, 5, 24
+"a:\Programming\Games\wiki-lie-3\client\src\components\GameInfoBar.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 16, 0, 0, 0, 4, 20
+"a:\Programming\Games\wiki-lie-3\client\src\components\GameView.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 36, 0, 0, 0, 10, 46
+"a:\Programming\Games\wiki-lie-3\client\src\components\PlayerList.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 48, 0, 0, 0, 7, 55
+"a:\Programming\Games\wiki-lie-3\client\src\global.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"a:\Programming\Games\wiki-lie-3\client\src\index.css", "CSS", 0, 0, 0, 0, 259, 0, 0, 0, 3, 47, 309
+"a:\Programming\Games\wiki-lie-3\client\src\index.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 10, 0, 0, 0, 6, 16
+"a:\Programming\Games\wiki-lie-3\client\src\models.ts", "TypeScript", 12, 0, 0, 0, 0, 0, 0, 0, 0, 4, 16
+"a:\Programming\Games\wiki-lie-3\client\src\pages\GamePage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 57, 0, 0, 11, 10, 78
+"a:\Programming\Games\wiki-lie-3\client\src\pages\HomePage.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 94, 0, 0, 2, 13, 109
+"a:\Programming\Games\wiki-lie-3\client\src\utils.ts", "TypeScript", 21, 0, 0, 0, 0, 0, 0, 0, 0, 2, 23
+"a:\Programming\Games\wiki-lie-3\client\src\wikipedia.ts", "TypeScript", 42, 0, 0, 0, 0, 0, 0, 0, 0, 7, 49
+"a:\Programming\Games\wiki-lie-3\client\tailwind.config.js", "JavaScript", 0, 0, 0, 7, 0, 0, 0, 0, 0, 1, 8
+"a:\Programming\Games\wiki-lie-3\client\tsconfig.json", "JSON with Comments", 0, 18, 0, 0, 0, 0, 0, 0, 0, 1, 19
+"a:\Programming\Games\wiki-lie-3\client\vite.config.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 1, 2, 17
+"a:\Programming\Games\wiki-lie-3\server\package.json", "JSON", 0, 0, 28, 0, 0, 0, 0, 0, 0, 1, 29
+"a:\Programming\Games\wiki-lie-3\server\src\AppError.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 0, 4, 13
+"a:\Programming\Games\wiki-lie-3\server\src\GameManager.ts", "TypeScript", 105, 0, 0, 0, 0, 0, 0, 0, 4, 20, 129
+"a:\Programming\Games\wiki-lie-3\server\src\RedisGameClient.ts", "TypeScript", 27, 0, 0, 0, 0, 0, 0, 0, 5, 10, 42
+"a:\Programming\Games\wiki-lie-3\server\src\constants.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 0, 0, 2, 12
+"a:\Programming\Games\wiki-lie-3\server\src\index.ts", "TypeScript", 58, 0, 0, 0, 0, 0, 0, 0, 36, 20, 114
+"a:\Programming\Games\wiki-lie-3\server\tsconfig.json", "JSON with Comments", 0, 13, 0, 0, 0, 0, 0, 0, 0, 1, 14
+"a:\Programming\Games\wiki-lie-3\shared\models.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 0, 4, 29
+"Total", "-", 440, 31, 57, 13, 259, 319, 15, 61, 65, 264, 1524

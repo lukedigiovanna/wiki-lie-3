@@ -1,7 +1,7 @@
-import { createSignal, type Component } from "solid-js";
+import { type Component } from "solid-js";
 import { useParams, useNavigate } from "@solidjs/router";
 
-import { ErrorCode, Game } from "../../../shared/models";
+import { ErrorCode } from "../../../shared/models";
 
 import { Client } from "../Client";
 import GameView from "../components/GameView";
@@ -13,11 +13,7 @@ const GamePage: Component = () => {
 
     const navigate = useNavigate();
 
-    // if a client came directly to this page instead of from the homepage
-    // if they connected from the home page then we would expect the client to be connected already
-    // this primarily handles the case where a user refreshes their page or comes back to the URL
-    if (!Client.isConnected) {
-        // attempt to reconnect from this client
+    const attemptRejoin = () => {
         Client.connect().then(() => {
             // 
             Client.rejoinGame(id).then((game) => {
@@ -42,19 +38,33 @@ const GamePage: Component = () => {
             navigate("/");
         });
     }
+
+    // if a client came directly to this page instead of from the homepage
+    // if they connected from the home page then we would expect the client to be connected already
+    // this primarily handles the case where a user refreshes their page or comes back to the URL
+    if (!Client.isConnected) {
+        // attempt to reconnect from this client
+        attemptRejoin();
+    }
     
     window.onfocus = () => {
         // when we come back to this tab we should reestablish the connection
         // this handles a case such as a mobile client leaving their browser, 
         // causing the socket to disconnect, and then when they come back
         // we need to reestablish their connection
-        // connectAndJoin();
+        attemptRejoin();
     }
 
     return <>
         {/* <div class="background"></div> */}
         <div class="block border-black w-full mx-auto lg:w-[75%] py-2 px-2 bg-[#eee] h-[100vh]">
-            <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4">
+            <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4 cursor-pointer" onClick={() => {
+                const game = global.gameState();
+                if (game) {
+                    Client.leaveGame(game.uid);
+                }
+                navigate("/");
+            }}>
                 Wiki-Lie
             </h1>
             

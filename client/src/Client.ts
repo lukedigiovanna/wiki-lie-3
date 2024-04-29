@@ -104,6 +104,29 @@ class Client {
         });
     }
 
+    static async leaveGame(gameID: string) {
+        return await this.kickPlayer(gameID, clientID);
+    }
+
+    static async kickPlayer(gameID: string, playerID: string) {
+        return await new Promise<void>((resolve, reject) => {
+            if (!Client.current) {
+                reject("Cannot make a request without an active connection");
+                return;
+            }
+
+            Client.current.on("leave-game-success", () => {
+                resolve();
+            })
+
+            Client.current.on("leave-game-failure", (error) => {
+                reject(error);
+            });
+
+            Client.current.emit("leave-game", gameID, playerID);
+        });
+    }
+
     static onGameUpdate(callback: (game: Game) => void) {
         Client.onGameUpdateCallback = callback;
     }

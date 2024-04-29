@@ -97,6 +97,17 @@ io.on("connection", (socket: Socket) => {
             socket.emit("rejoin-game-failure", {code: e.code, message: e.message});
         }
     });
+
+    socket.on("leave-game", (gameUID: string, clientID: string) => {
+        try {
+            gameManager.leaveGame(gameUID, clientID);
+            socket.emit("leave-game-success");
+        }
+        catch (e: any) {
+            console.log("leave failure", e.message);
+            socket.emit("leave-game-failure", {code: e.code, message: e.message});
+        }
+    });
 });
 
 server.listen(port, () => {

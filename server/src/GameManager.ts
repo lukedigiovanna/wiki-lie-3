@@ -123,6 +123,32 @@ class GameManager {
             }
         }
     }
+
+    leaveGame(gameID: string, clientID: string) {
+        const game = this.games.get(gameID);
+
+        if (!game) {
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "Game not found with id: " + gameID);
+        }
+
+        const playerIndex = game.players.findIndex(player => player.clientID === clientID);
+        if (playerIndex < 0) {
+            throw new AppError(ErrorCode.LEAVE_FAILURE_CLIENT_NOT_FOUND, "Cannot leave game which player is not in");
+        }
+
+        const player = game.players[playerIndex];
+        if (player.isHost) {
+            // find a new host, if available
+            const nextIndex = (playerIndex + 1) % game.players.length;
+            game.players[nextIndex].isHost = true;
+        }
+
+        game.players.splice(playerIndex, 1);
+
+        this.recalculatePlayerRanks(game);
+
+        this.sendGameUpdate(gameID);
+    }
 }
 
 export default GameManager;
