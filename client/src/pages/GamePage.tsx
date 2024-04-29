@@ -9,7 +9,6 @@ import global from "../global";
 import clientID from "../clientID";
 import wikipedia from "../wikipedia";
 
-
 const GamePage: Component = () => {
     const { id } = useParams();
 
@@ -29,7 +28,7 @@ const GamePage: Component = () => {
             }).catch(err => {
                 console.log("Rejoin failed", err);
                 if (err.code === ErrorCode.REJOIN_FAILURE_ALREADY_CONNECTED) {
-                    alert("You are already connected to this game.")
+                    console.log("You are already connected to this game.")
                     navigate("/");
                 }
                 else if (err.code === ErrorCode.REJOIN_FAILURE_NEVER_CONNECTED) {
@@ -59,7 +58,13 @@ const GamePage: Component = () => {
         // this handles a case such as a mobile client leaving their browser, 
         // causing the socket to disconnect, and then when they come back
         // we need to reestablish their connection
-        attemptRejoin();
+        if (!Client.isConnected) {
+            attemptRejoin();
+        }
+    }
+
+    window.onbeforeunload = () => {
+        Client.disconnect();
     }
 
     return <>

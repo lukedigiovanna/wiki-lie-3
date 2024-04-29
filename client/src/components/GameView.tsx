@@ -9,14 +9,15 @@ import ArticleDisplay from "./ArticleDisplay";
 import store from "../global";
 import { Client } from "../Client";
 import clientID from "../clientID";
+import global from "../global";
 
 const GameView: Component<GameProperty> = (props: GameProperty) => {
     console.log("Rerendering GameView");
 
     const game = () => props.game;
     const us = () => game().players.find(value => value.clientID === clientID);
-
-    const [blurArticle, setBlurArticle] = createSignal(false);
+    const hasSelectedArticle = () => us()?.selectedArticle !== null;
+    const isGuesser = () => game().players.findIndex(value => value.clientID === clientID) === game().guesserIndex;
 
     return <>
         <GameInfoBar game={game()} />
@@ -25,19 +26,20 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
             <PlayerList game={game()} />
 
             <div class="sm:ml-4 flex flex-col w-full space-y-4">
-                <div class="p-2 border border-gray-300 shadow rounded w-full space-x-4 flex flex-row justify-center sm:justify-start">
+                <div class={`p-2 border ${hasSelectedArticle() ? "border-green-700" : "border-gray-300"} shadow rounded w-full space-x-4 flex flex-row justify-center sm:justify-start transition-all items-center`}>
                     {
                         us()?.selectedArticle ?
                         <>
                             <button class="action-button" onClick={async () => {
                                 Client.chooseArticle(game().uid, clientID, null);
+                                global.setBlurArticle(_ => false);
                             }}>
                                 Deselect This
                             </button>
                             <button class="action-button" onClick={() => {
-                                setBlurArticle(blur => !blur);
+                                global.setBlurArticle(blur => !blur);
                             }}>
-                                Blur Article
+                                {global.blurArticle() ? "Unblur Article" : "Blur Article"}
                             </button>
                         </>
                         :
@@ -55,9 +57,13 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
                             </button>
                         </>
                     }
+                    {
+                        isGuesser() &&
+                        <p class="h-fit italic text-[0.7rem] text-gray-600">(this article won't be used this round)</p>
+                    }
                 </div>
 
-                <ArticleDisplay article={store.article()} blur={blurArticle()} />
+                <ArticleDisplay article={store.article()} blur={global.blurArticle()} selected={hasSelectedArticle()} />
             </div>
         </div>
         <p>

@@ -2,10 +2,11 @@ import express from "express";
 import { createServer } from "http";
 import { join } from "path";
 import { Socket, Server as SocketServer } from "socket.io";
+import { appendFile } from 'fs';
 
 import GameManager from "./GameManager";
 
-// dotenv.config();
+const listOfArticlesFilePath = "articles.txt";
 
 const port = 3000;
 
@@ -118,7 +119,17 @@ io.on("connection", (socket: Socket) => {
             console.log("choose-article failure", e.message);
             socket.emit("choose-article-failure", {code: e.code, message: e.message});
         }
-    })
+    });
+
+    socket.on("save-article", (articleTitle: string) => {
+        appendFile(listOfArticlesFilePath, articleTitle + "\n", (err) => {
+            if (err) {
+              console.error('Failed to append data to the file:', err);
+            } else {
+              console.log('appended', articleTitle);
+            }
+        });
+    });
 });
 
 server.listen(port, () => {

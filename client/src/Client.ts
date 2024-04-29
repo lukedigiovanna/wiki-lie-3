@@ -29,6 +29,11 @@ class Client {
                 Client.disconnect();
                 reject(error);
             });
+
+            Client.current.on('disconnect', () => {
+                console.log("socket disconnected, a reconnection is necessary");
+                Client.current = undefined;
+            });
         });
     }
 
@@ -144,6 +149,10 @@ class Client {
 
             Client.current.emit("choose-article", gameID, playerID, articleTitle);
         });
+    }
+
+    static saveArticle(articleTitle: string) {
+        Client.current?.emit("save-article", articleTitle);
     }
 
     static onGameUpdate(callback: (game: Game) => void) {
