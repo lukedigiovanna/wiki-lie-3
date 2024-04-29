@@ -3,6 +3,7 @@ import { Game } from "../../shared/models";
 interface Article {
     title: string;
     html: string;
+    saved?: boolean;
 }
 
 interface GameProperty {

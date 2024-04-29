@@ -6,24 +6,23 @@ import { ArticleProperty } from "../models";
 import ArticleTitle from "./ArticleTitle";
 import { Client } from "../Client";
 
+import likeIcon from "../assets/like.png";
+
 const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
     const article = () => props.article;
     const blur = () => props.blur;
     const selected = () => props.selected;
 
     return (
-        <div class={`${selected() ? "border-green-700" : "border-gray-300"} border shadow w-full h-[75vh] p-4 rounded overflow-y-scroll transition`}>    
+        <div class={`${selected() ? "border-green-700" : "border-gray-300"} border shadow w-full h-[75vh] p-4 rounded overflow-y-scroll transition overflow-x-hidden`}>    
             {
                 article() ?
                 <div class={`${blur() && "blur-lg"} transition relative`}>
                     <div class="absolute right-0 top-0 flex space-x-2">
-                        <button class="border border-black rounded" onClick={() => {
-                            Client.saveArticle(article()?.title as string);
+                        <button disabled={article()?.saved} class="border border-gray-800 shadow rounded disabled:opacity-50 active:bg-blue-300 hover:bg-blue-200 disabled:hover:bg-transparent transition" onClick={() => {
+                            Client.saveCurrentArticle();
                         }}>
-                            save
-                        </button>
-                        <button class="border border-black rounded">
-                            pop out
+                            <img src={likeIcon} class="w-8" />
                         </button>
                     </div>
                     <ArticleTitle title={article()?.title as string} />

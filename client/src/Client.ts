@@ -2,6 +2,8 @@ import { io, Socket } from "socket.io-client";
 import clientID from "./clientID";
 
 import { Game } from "../../shared/models";
+import { Article } from "./models";
+import global from "./global";
 
 class Client {
     private static current: Socket | undefined = undefined;
@@ -151,8 +153,16 @@ class Client {
         });
     }
 
-    static saveArticle(articleTitle: string) {
-        Client.current?.emit("save-article", articleTitle);
+    static saveCurrentArticle() {
+        if (Client.current) {
+            // just assume this works for now, no error checking on client. not a critical pathway
+            const article = global.article();
+            if (article) {
+                Client.current.emit("save-article", article.title);
+                article.saved = true;
+                global.setArticle(_ => ({...article})); // trigger update on this article. 
+            }
+        }
     }
 
     static onGameUpdate(callback: (game: Game) => void) {
