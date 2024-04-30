@@ -1,4 +1,4 @@
-import { Component, createSignal } from "solid-js";
+import { Accessor, Component, createSignal, For } from "solid-js";
 import { GameProperty } from "../models";
 import wikipedia from "../wikipedia";
 
@@ -7,10 +7,11 @@ import PlayerList from "./PlayerList";
 import ArticleDisplay from "./ArticleDisplay";
 
 import store from "../global";
-import { Client } from "../Client";
 import clientID from "../clientID";
 import global from "../global";
 import ArticleActionBar from "./ArticleActionBar";
+import { Player } from "@shared/models";
+import { Client } from "../Client";
 
 const GameView: Component<GameProperty> = (props: GameProperty) => {
     console.log("Rerendering GameView");
@@ -20,6 +21,8 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
     const hasSelectedArticle = () => us()?.selectedArticle !== null;
 
     const currentArticleTitle = () => game().players[game().currentArticlePlayerIndex].selectedArticle;
+
+    const ourIndex = () => game().players.findIndex(value => value.clientID === clientID);
 
     return <>
         <GameInfoBar game={game()} />
@@ -39,6 +42,27 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
                                 {currentArticleTitle()}
                             </h1>
                         </div>
+                        {
+                            ourIndex() === game().guesserIndex &&
+                            <div class="border-gray-300 border shadow w-full p-4 rounded text-center">
+                                <p class="text-gray-600 italic mb-2">
+                                    Who is telling the truth?
+                                </p>
+                                <div class="flex flex-row space-x-4 justify-center">
+                                    <For each={game().players.filter((_, index) => index !== game().guesserIndex)} children={(player: Player, index: Accessor<number>) => {
+                                        return (
+                                            <button class="border border-gray-500 shadow px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:shadow-none transition font-bold text-[0.95rem]"
+                                                onClick={() => {
+                                                    Client.guessPlayer(game().uid, player.clientID);
+                                                }}
+                                            >
+                                                {player.username}
+                                            </button>
+                                        )
+                                    }} />
+                                </div>
+                            </div>
+                        }
                     </>
                     :
                     <>

@@ -1,4 +1,4 @@
-import { ErrorCode, Game, Player } from "../../shared/models";
+import { ErrorCode, Game, Player, RoundSummary } from "../../shared/models";
 import { Server as SocketServer } from "socket.io";
 import { generateGameUID } from "./constants";
 import { AppError } from "./AppError";
@@ -45,7 +45,7 @@ class GameManager {
         const gameObject: Game = {
             uid: gameUID,
             players: [],
-
+            history: [],
             inRound: false,
             startedRoundTime: 0,
             guesserIndex: 0,
@@ -68,10 +68,15 @@ class GameManager {
                 throw new AppError(ErrorCode.JOIN_FAILURE_ALREADY_JOINED, "You have already joined this game!");
             }
         }
+
+        if (game.inRound) {
+            throw new AppError(ErrorCode.JOIN_FAILURE_GAME_IN_ROUND, "This game is currently in a round, you can join after they finish");
+        }
+        
         // create a new player with this client
         const newPlayer: Player = {
             clientID,
-            points: Math.floor(Math.random() * 10),
+            points: 0,
             selectedArticle: null,
             username,
             isConnected: true,
@@ -137,11 +142,31 @@ class GameManager {
             throw new AppError(ErrorCode.LEAVE_FAILURE_CLIENT_NOT_FOUND, "Cannot leave game which player is not in");
         }
 
+        // if a player left the game mid-round, then unfortunately we need to cancel the round.
+        // ideally, players wouldn't do this.
+        if (game.inRound) {
+            const readerPlayer = game.players[game.currentArticlePlayerIndex];
+
+            const summary: RoundSummary = {
+                article: readerPlayer.selectedArticle as string,
+                reader: readerPlayer.username
+            };
+            game.history.push(summary);
+
+            readerPlayer.selectedArticle = null;
+
+            game.inRound = false;
+        }
+
         const player = game.players[playerIndex];
         if (player.isHost) {
             // find a new host, if available
             const nextIndex = (playerIndex + 1) % game.players.length;
             game.players[nextIndex].isHost = true;
+        }
+
+        if (playerIndex < game.guesserIndex) {
+            game.guesserIndex--;
         }
 
         game.players.splice(playerIndex, 1);
@@ -196,6 +221,57 @@ class GameManager {
         game.inRound = true;
         game.startedRoundTime = new Date().getTime();
         game.currentArticlePlayerIndex = randomIndex;
+
+        this.sendGameUpdate(gameID);
+    }
+
+    guessPlayer(gameID: string, guessPlayerID: string) {
+        const game = this.games.get(gameID);
+
+        if (!game) {
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "Game not found with id: " + gameID);
+        }
+
+        if (!game.inRound) {
+            throw new AppError(ErrorCode.GUESS_PLAYER_NOT_IN_ROUND, "Cannot guess a player when not in a round");
+        }
+
+        const readerPlayer = game.players[game.currentArticlePlayerIndex];
+        const guesserPlayer = game.players.find((_, index) => index === game.guesserIndex);
+        const guessedPlayer = game.players.find((player) => player.clientID === guessPlayerID);
+
+        if (!guessedPlayer) {
+            throw new AppError(ErrorCode.GUESS_PLAYER_PLAYER_NOT_IN_GAME, "The player you are trying to guess is not in this game.");
+        }
+
+        if (!guesserPlayer) {
+            throw new AppError(ErrorCode.GUESS_PLAYER_PLAYER_NOT_IN_GAME, "There's no guesser");
+        }
+
+        if (guessPlayerID === readerPlayer.clientID) {
+            // the guesser chose the right player, +1 to each
+            readerPlayer.points += 1;
+            guesserPlayer.points += 1;
+        }
+        else {
+            // guesser guessed wrong -- +2 to the foolower
+            guessedPlayer.points += 2;
+        }
+
+        this.recalculatePlayerRanks(game);
+
+        const summary: RoundSummary = {
+            article: readerPlayer.selectedArticle as string,
+            reader: readerPlayer.username
+        };
+
+        game.history.push(summary);
+
+        readerPlayer.selectedArticle = null;
+
+        game.guesserIndex = (game.guesserIndex + 1) % game.players.length;
+
+        game.inRound = false;
 
         this.sendGameUpdate(gameID);
     }

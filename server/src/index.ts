@@ -130,7 +130,17 @@ io.on("connection", (socket: Socket) => {
             console.log("start round failure", e.message);
             socket.emit("start-round-failure", {code: e.code, message: e.message});
         }
-    })
+    });
+
+    socket.on("guess-player", (gameUID: string, guessPlayerID: string) => {
+        try {
+            gameManager.guessPlayer(gameUID, guessPlayerID);
+            socket.emit("guess-player-success");
+        }
+        catch (e: any) {
+            socket.emit("guess-player-failure", {code:e.code, message:e.message});
+        }
+    });
 
     socket.on("save-article", (articleTitle: string) => {
         appendFile(listOfArticlesFilePath, articleTitle + "\n", (err) => {

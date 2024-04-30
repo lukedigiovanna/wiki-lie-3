@@ -172,6 +172,25 @@ class Client {
         });
     }
 
+    static async guessPlayer(gameID: string, guessClientID: string) {
+        return await new Promise<void>((resolve, reject) => {
+            if (!Client.current) {
+                reject("Cannot make a request without an active connection");
+                return;
+            }
+
+            Client.current.on("guess-player-success", () => {
+                resolve();
+            });
+
+            Client.current.on("guess-player-failure", (error) => {
+                reject(error);
+            });
+
+            Client.current.emit("guess-player", gameID, guessClientID);
+        });
+    }
+
     static saveCurrentArticle() {
         if (Client.current) {
             // just assume this works for now, no error checking on client. not a critical pathway
