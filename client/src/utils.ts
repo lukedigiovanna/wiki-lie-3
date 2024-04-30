@@ -28,4 +28,11 @@ function countReadyPlayers(game: Game) {
     ).length;
 }
 
-export { generateRandomUsername, countReadyPlayers };
+function formatTimeMMSS(milliseconds: number) {
+    const seconds = Math.floor(milliseconds / 1000) % 60;
+    const minutes = Math.floor(milliseconds / 60000);
+    const secondsDisplay = (seconds < 10 ? "0" : "") + (seconds % 60).toString();
+    return `${minutes}:${secondsDisplay}`;
+}
+
+export { generateRandomUsername, countReadyPlayers, formatTimeMMSS };

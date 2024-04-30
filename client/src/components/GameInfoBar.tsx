@@ -1,7 +1,7 @@
 import { GameProperty } from "../models"
 
-import { Component } from "solid-js"
-import { countReadyPlayers } from "../utils";
+import { Component, createEffect, createSignal, onCleanup } from "solid-js"
+import { countReadyPlayers, formatTimeMMSS } from "../utils";
 import clientID from "../clientID";
 import { Client } from "../Client";
 
@@ -14,13 +14,24 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
 
     const ourIndex = () => game().players.findIndex(value => value.clientID === clientID);
 
+    const [roundTimer, setRoundTimer] = createSignal(0);
+
+    createEffect(() => {
+        const intervalId = setInterval(() => {
+          setRoundTimer(_ => new Date().getTime() - game().startedRoundTime);
+        }, 100);
+    
+        // Cleanup function that clears the interval when the effect re-runs or the component unmounts
+        onCleanup(() => clearInterval(intervalId));
+    });
+
     return (
         <div class="flex-1 border border-gray-400 bg-gray-200 shadow rounded p-2 flex flex-row justify-center items-center space-x-8 sm:space-x-16 mb-4 w-full">
             {
                 game().inRound ?
                 <>
                     <p class="text-center font-bold text-blue-500 drop-shadow-md text-[1.05rem]">
-                        The Article Is: {game().players[game().currentArticlePlayerIndex].selectedArticle}
+                        {formatTimeMMSS(roundTimer())}
                     </p>
                 </>
                 :
