@@ -44,11 +44,12 @@ class GameManager {
 
         const gameObject: Game = {
             uid: gameUID,
-            currentArticle: null,
-            startedRoundTime: null,
+            players: [],
+
             inRound: false,
+            startedRoundTime: 0,
             guesserIndex: 0,
-            players: []
+            currentArticlePlayerIndex: 0,
         };
 
         this.games.set(gameUID, gameObject);
@@ -163,6 +164,38 @@ class GameManager {
         }
 
         game.players[playerIndex].selectedArticle = articleTitle;
+
+        this.sendGameUpdate(gameID);
+    }
+
+    startRound(gameID: string) {
+        const game = this.games.get(gameID);
+
+        if (!game) {
+            throw new AppError(ErrorCode.GAME_NOT_FOUND, "Game not found with id: " + gameID);
+        }
+
+        if (game.inRound) {
+            throw new AppError(ErrorCode.START_ROUND_ROUND_ALREADY_STARTED, "A round is already in progress, cannot start one now");
+        }
+
+        // check if a player somehow didn't choose an article
+        for (let i = 0; i < game.players.length; i++) {
+            if (i !== game.guesserIndex && game.players[i].selectedArticle === null) {
+                throw new AppError(ErrorCode.START_ROUND_NOT_ALL_PLAYERS_CHOSE_ARTICLE, "Can't start a round unless all players have chosen an article");
+            }
+        }
+        
+
+        // choose a random player who isn't the guesser.
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * game.players.length);
+        } while (randomIndex === game.guesserIndex);
+
+        game.inRound = true;
+        game.startedRoundTime = new Date().getTime();
+        game.currentArticlePlayerIndex = randomIndex;
 
         this.sendGameUpdate(gameID);
     }

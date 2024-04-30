@@ -1,16 +1,15 @@
-import { GameProperty } from "../models";
-import { Player } from "../../../shared/models";
-
 import { Component } from "solid-js";
 
+import { GameProperty } from "../models";
+import { Player } from "../../../shared/models";
 import clientID from "../clientID";
+import { Client } from "../Client";
 
 import checkGIF from "../assets/check.gif";
 import readingGIF from "../assets/reading.gif";
 import judgePNG from "../assets/judge.png";
 import disconnectedPNG from "../assets/disconnected.png";
 import crownPNG from "../assets/crown.png";
-import { Client } from "../Client";
 
 function getRankColorClass(rank: number) {
     if (rank === 1) {

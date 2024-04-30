@@ -153,6 +153,25 @@ class Client {
         });
     }
 
+    static async startRound(gameID: string) {
+        return await new Promise<void>((resolve, reject) => {
+            if (!Client.current) {
+                reject("Cannot make a request without an active connection");
+                return;
+            }
+
+            Client.current.on("start-round-success", () => {
+                resolve();
+            });
+
+            Client.current.on("start-round-failure", (error) => {
+                reject(error);
+            });
+
+            Client.current.emit("start-round", gameID);
+        });
+    }
+
     static saveCurrentArticle() {
         if (Client.current) {
             // just assume this works for now, no error checking on client. not a critical pathway

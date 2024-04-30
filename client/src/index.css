@@ -32,6 +32,22 @@ body {
     @apply border border-gray-400 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 font-bold text-[0.95rem] px-2 py-1 rounded transition text-gray-800 disabled:hover:bg-gray-200 disabled:opacity-50;
 }
 
+@keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+}
+
+.animate-gradientBG {
+    background-size: 200% 200%;
+    animation: gradientBG 2s ease infinite;
+}
 
 @keyframes shake {
     0%, 100% {
@@ -305,8 +321,13 @@ caption {
     margin: 0.5rem 1.4rem 1.3rem 0;
 }
 
-.mw-headline {
+.mw-parser-output > h2 > .mw-headline {
     font-size: 1.5rem;
+}
+
+.mw-parser-output > h3 > .mw-headline {
+    font-size: 1.05rem;
+    font-weight: bold;
 }
 
 /* .popover {

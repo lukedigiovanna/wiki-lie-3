@@ -11,10 +11,11 @@ interface Player {
 interface Game {
     uid: string;
     players: Player[];
-    currentArticle: string | null;
-    guesserIndex: 0;
+    // round related fields
     inRound: boolean;
-    startedRoundTime: number | null;
+    startedRoundTime: number;
+    guesserIndex: number;
+    currentArticlePlayerIndex: number;
 }
 
 enum ErrorCode {
@@ -23,7 +24,9 @@ enum ErrorCode {
     REJOIN_FAILURE_ALREADY_CONNECTED,
     REJOIN_FAILURE_NEVER_CONNECTED,
     LEAVE_FAILURE_CLIENT_NOT_FOUND,
-    CHOOSE_ARTICLE_CLIENT_NOT_FOUND
+    CHOOSE_ARTICLE_CLIENT_NOT_FOUND,
+    START_ROUND_ROUND_ALREADY_STARTED,
+    START_ROUND_NOT_ALL_PLAYERS_CHOSE_ARTICLE
 }
 
 export type { Player, Game };
