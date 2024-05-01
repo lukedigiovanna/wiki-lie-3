@@ -12,6 +12,7 @@ import global from "../global";
 import ArticleActionBar from "./ArticleActionBar";
 import { Player } from "@shared/models";
 import { Client } from "../Client";
+import Popover from "./Popover";
 
 const GameView: Component<GameProperty> = (props: GameProperty) => {
     console.log("Rerendering GameView");
@@ -24,8 +25,16 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
 
     const ourIndex = () => game().players.findIndex(value => value.clientID === clientID);
 
+    const [test, setTest] = createSignal(true);
+
     return <>
+        <Popover visible={test()} close={() => {setTest(false)}}>
+            hi bitch
+        </Popover>
+        
+        
         <GameInfoBar game={game()} />
+
 
         <div class="flex flex-col sm:flex-row">
             <PlayerList game={game()} />
@@ -34,11 +43,11 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
                 {
                     game().inRound ?
                     <>
-                        <div class="border-gray-300 border shadow w-full h-[35vh] p-4 rounded text-center">
+                        <div class="border-gray-300 border shadow w-full h-fit p-4 rounded text-center">
                             <p class="text-gray-500 italic mt-10">
                                 The article title is
                             </p>
-                            <h1 class="font-[Libertine] text-[3rem] font-bold">
+                            <h1 class="font-[Libertine] text-[3rem] font-bold mb-10">
                                 {currentArticleTitle()}
                             </h1>
                         </div>
