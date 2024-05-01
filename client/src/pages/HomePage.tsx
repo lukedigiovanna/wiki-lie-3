@@ -5,6 +5,7 @@ import { Client } from "../Client";
 
 import global from "../global";
 import { generateRandomUsername } from "../utils";
+import { showErrorPopover } from "../popovers";
 
 const HomePage: Component = () => {
     const [searchParams, _] = useSearchParams();
@@ -53,7 +54,8 @@ const HomePage: Component = () => {
                                 await Client.connect();
                                 await joinGame(join);
                             }
-                            catch (e) {
+                            catch (e: any) {
+                                showErrorPopover(e.message as string);
                                 console.log("Error ocurred", e);
                             }
                         }}>
