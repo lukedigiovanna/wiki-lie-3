@@ -171,6 +171,8 @@ class GameManager {
         }
 
         game.players.splice(playerIndex, 1);
+        
+        game.guesserIndex %= game.players.length;
 
         this.recalculatePlayerRanks(game);
 

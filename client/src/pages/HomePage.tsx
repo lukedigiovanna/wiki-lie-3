@@ -1,4 +1,4 @@
-import { createSignal, type Component } from "solid-js";
+import { createSignal, onCleanup, type Component } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import { useNavigate } from "@solidjs/router";
 import { Client } from "../Client";
@@ -6,12 +6,31 @@ import { Client } from "../Client";
 import global from "../global";
 import { generateRandomUsername } from "../utils";
 import { showErrorPopover, showRoundSummaryPopover } from "../popovers";
-import { Game } from "@shared/models";
+import { ErrorCode, Game } from "@shared/models";
+
+function useJoinCode() {
+    function getCurrentSearchValue() {
+        return new URLSearchParams(window.location.search).get("join");
+    }
+
+    const [joinCode, setJoinCode] = createSignal<string | null>(getCurrentSearchValue());
+    
+    function updateJoinCode() {
+        setJoinCode(_ => getCurrentSearchValue())
+    }
+  
+    window.addEventListener('popstate', updateJoinCode);
+  
+    onCleanup(() => {
+      window.removeEventListener('popstate', updateJoinCode);
+    });
+  
+    return joinCode;
+  }
+  
 
 const HomePage: Component = () => {
-    const [searchParams, _] = useSearchParams();
-
-    const { join } = searchParams;
+    const joinCode = useJoinCode();
 
     const navigate = useNavigate();
 
@@ -20,14 +39,6 @@ const HomePage: Component = () => {
     const joinGame = async (gameID: string) => {
         const game = await Client.joinGame(gameID, username().length === 0 ? generateRandomUsername() : username());
         global.setGameState(game);
-        Client.onGameUpdate((game: Game) => {
-            const currentGame = global.gameState();
-            if (currentGame?.inRound && !game.inRound) {
-                showRoundSummaryPopover(game.history[game.history.length - 1])
-            }
-            global.setGameState(_ => game);
-
-        });
         navigate(`/game/${gameID}`);
     }
 
@@ -55,12 +66,12 @@ const HomePage: Component = () => {
                 />
 
                 <div class="flex justify-center mt-4 space-x-6">
-                    {join ? 
+                    {joinCode() ? 
                         <button class="menu-button" onClick={async () => {
                             try {
                                 // make a connection to the websocket and then create a game
                                 await Client.connect();
-                                await joinGame(join);
+                                await joinGame(joinCode() as string);
                             }
                             catch (e: any) {
                                 showErrorPopover(e.message as string);

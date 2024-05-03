@@ -4,10 +4,17 @@ import clientID from "./clientID";
 import { Game } from "../../shared/models";
 import { Article } from "./models";
 import global from "./global";
+import { showRoundSummaryPopover } from "./popovers";
 
 class Client {
     private static current: Socket | undefined = undefined;
-    private static onGameUpdateCallback: ((game: Game) => void) | undefined = undefined;
+    private static onGameUpdateCallback: ((game: Game) => void) | undefined = (game: Game) => {
+        const currentGame = global.gameState();
+        if (currentGame?.inRound && !game.inRound) {
+            showRoundSummaryPopover(game.history[game.history.length - 1])
+        }
+        global.setGameState(_ => game);
+    };
 
     static get isConnected() {
         return Client.current !== undefined;
@@ -201,10 +208,6 @@ class Client {
                 global.setArticle(_ => ({...article})); // trigger update on this article. 
             }
         }
-    }
-
-    static onGameUpdate(callback: (game: Game) => void) {
-        Client.onGameUpdateCallback = callback;
     }
 }
 

@@ -1,4 +1,4 @@
-import { type Component } from "solid-js";
+import { onCleanup, type Component } from "solid-js";
 import { useParams, useNavigate } from "@solidjs/router";
 
 import { ErrorCode } from "../../../shared/models";
@@ -25,7 +25,6 @@ const GamePage: Component = () => {
                         global.setArticle(_ => article);
                     });
                 }
-                Client.onGameUpdate(global.setGameState);
             }).catch(err => {
                 console.log("Rejoin failed", err);
                 if (err.code === ErrorCode.REJOIN_FAILURE_ALREADY_CONNECTED) {
@@ -66,9 +65,10 @@ const GamePage: Component = () => {
         }
     }
 
-    window.onbeforeunload = () => {
+    onCleanup(() => {
+        window.onfocus = () => {};
         Client.disconnect();
-    }
+    });
 
     return <>
         {/* <div class="background"></div> */}

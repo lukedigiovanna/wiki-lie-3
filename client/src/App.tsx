@@ -28,7 +28,7 @@ const App: Component = () => {
         </h1>
         <hr class="mb-1" />
         <div class="flex flex-col items-center">
-          <a class="font-bold text-blue-500 hover:text-purple-500 active:text-purple-800 transition text-[1.75rem] font-[Libertine]" href={getWikipediaURL(popovers.roundSummary().article)} title="open in wikipedia" target="_blank" >
+          <a class="text-center font-bold text-blue-500 hover:text-purple-500 active:text-purple-800 transition text-[1.75rem] font-[Libertine]" href={getWikipediaURL(popovers.roundSummary().article)} title="open in wikipedia" target="_blank" >
             {popovers.roundSummary().article}
           </a>
           <p class="text-[0.95rem] italic">
