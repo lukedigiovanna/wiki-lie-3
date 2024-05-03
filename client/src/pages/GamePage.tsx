@@ -8,6 +8,7 @@ import GameView from "../components/GameView";
 import global from "../global";
 import clientID from "../clientID";
 import wikipedia from "../wikipedia";
+import popovers, { showErrorPopover } from "../popovers";
 
 const GamePage: Component = () => {
     const { id } = useParams();
@@ -28,19 +29,21 @@ const GamePage: Component = () => {
             }).catch(err => {
                 console.log("Rejoin failed", err);
                 if (err.code === ErrorCode.REJOIN_FAILURE_ALREADY_CONNECTED) {
-                    console.log("You are already connected to this game.")
                     navigate("/");
+                    showErrorPopover(err.message as string);
                 }
                 else if (err.code === ErrorCode.REJOIN_FAILURE_NEVER_CONNECTED) {
                     navigate(`/?join=${id}`);
                 }
                 else {
                     console.log("Unknown error occurred");
+                    showErrorPopover(err.message as string);
                     navigate("/");
                 }
             });
         }).catch(err => {
             console.log("Failed to establish socket connection", err);
+            showErrorPopover("Failed to establish a connection to the server.");
             navigate("/");
         });
     }

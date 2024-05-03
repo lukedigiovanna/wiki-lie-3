@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import { getWikipediaURL } from "../wikipedia";
 
 const ArticleTitle: Component<{title: string}> = (props: {title: string}) => {
     const title = () => props.title;
@@ -24,7 +25,7 @@ const ArticleTitle: Component<{title: string}> = (props: {title: string}) => {
     }
 
     return (
-        <a class="text-[2rem] font-wikipedia-title border-b-[#a2a9b1] p-1 hover:text-blue-900 text-gray-900 transition pointer-events-auto" href={`https://en.wikipedia.org/wiki/${title().replaceAll(" ", "_")}`} title="open in wikipedia" target="_blank">
+        <a class="text-[2rem] font-wikipedia-title border-b-[#a2a9b1] p-1 hover:text-blue-900 text-gray-900 transition pointer-events-auto" href={getWikipediaURL(title())} title="open in wikipedia" target="_blank">
             {pre()}
             <span class="text-gray-600 text-[1.5rem] italic" title="This part is not visible to other players">
                 {post()}

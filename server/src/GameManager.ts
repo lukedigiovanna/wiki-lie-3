@@ -149,7 +149,8 @@ class GameManager {
 
             const summary: RoundSummary = {
                 article: readerPlayer.selectedArticle as string,
-                reader: readerPlayer.username
+                reader: readerPlayer.username,
+                hadError: true
             };
             game.history.push(summary);
 
@@ -262,7 +263,10 @@ class GameManager {
 
         const summary: RoundSummary = {
             article: readerPlayer.selectedArticle as string,
-            reader: readerPlayer.username
+            reader: readerPlayer.username,
+            guesser: guesserPlayer.username,
+            guessed: guessedPlayer.username,
+            hadError: false,
         };
 
         game.history.push(summary);

@@ -1,6 +1,5 @@
-import { Accessor, Component, createSignal, For } from "solid-js";
+import { Accessor, Component, For } from "solid-js";
 import { GameProperty } from "../models";
-import wikipedia from "../wikipedia";
 
 import GameInfoBar from "./GameInfoBar";
 import PlayerList from "./PlayerList";
@@ -12,11 +11,8 @@ import global from "../global";
 import ArticleActionBar from "./ArticleActionBar";
 import { Player } from "@shared/models";
 import { Client } from "../Client";
-import Popover from "./Popover";
 
 const GameView: Component<GameProperty> = (props: GameProperty) => {
-    console.log("Rerendering GameView");
-
     const game = () => props.game;
     const us = () => game().players.find(value => value.clientID === clientID);
     const hasSelectedArticle = () => us()?.selectedArticle !== null;
@@ -25,14 +21,7 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
 
     const ourIndex = () => game().players.findIndex(value => value.clientID === clientID);
 
-    const [test, setTest] = createSignal(true);
-
     return <>
-        <Popover visible={test()} close={() => {setTest(false)}}>
-            hi bitch
-        </Popover>
-        
-        
         <GameInfoBar game={game()} />
 
 

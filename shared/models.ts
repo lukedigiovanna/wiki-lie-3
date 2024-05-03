@@ -10,7 +10,10 @@ interface Player {
 
 interface RoundSummary {
     article: string;
-    reader: string; // username
+    reader: string; // username of the one who read the article
+    guesser?: string;
+    guessed?: string;
+    hadError: boolean;
 }
 
 interface Game {

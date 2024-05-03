@@ -1,7 +1,7 @@
+import { RoundSummary } from "@shared/models";
 import { createSignal } from "solid-js";
 
 const [showError, setShowError] = createSignal(false);
-
 const [errorMessage, setErrorMessage] = createSignal("");
 
 function showErrorPopover(message: string) {
@@ -9,8 +9,23 @@ function showErrorPopover(message: string) {
     setErrorMessage(_ => message);
 }
 
-export { showErrorPopover };
+const [showRoundSummary, setShowRoundSummary] = createSignal(false);
+const [roundSummary, setRoundSummary] = createSignal<RoundSummary>({
+    article: "Test Article",
+    reader: "readername",
+    guesser: "guessername",
+    guessed: "guessedname",
+    hadError: false
+});
+
+function showRoundSummaryPopover(summary: RoundSummary) {
+    setShowRoundSummary(_ => true);
+    setRoundSummary(_ => ({...summary}));
+}
+
+export { showErrorPopover, showRoundSummaryPopover };
 
 export default {
-    showError, setShowError, errorMessage
+    showError, setShowError, errorMessage,
+    showRoundSummary, setShowRoundSummary, roundSummary
 }

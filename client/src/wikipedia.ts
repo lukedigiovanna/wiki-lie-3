@@ -1,6 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestHeaders } from "axios";
 import { Article } from "./models";
 
+function getWikipediaURL(articleTitle: string) {
+    return `https://en.wikipedia.org/wiki/${articleTitle.replaceAll(" ", "_")}`;
+}
+
 class WikipediaClient {
     private instance: AxiosInstance;
     private defaultHeaders = {
@@ -47,3 +51,4 @@ class WikipediaClient {
 }
 
 export default new WikipediaClient();
+export { getWikipediaURL };

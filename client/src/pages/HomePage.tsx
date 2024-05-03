@@ -5,7 +5,8 @@ import { Client } from "../Client";
 
 import global from "../global";
 import { generateRandomUsername } from "../utils";
-import { showErrorPopover } from "../popovers";
+import { showErrorPopover, showRoundSummaryPopover } from "../popovers";
+import { Game } from "@shared/models";
 
 const HomePage: Component = () => {
     const [searchParams, _] = useSearchParams();
@@ -19,7 +20,14 @@ const HomePage: Component = () => {
     const joinGame = async (gameID: string) => {
         const game = await Client.joinGame(gameID, username().length === 0 ? generateRandomUsername() : username());
         global.setGameState(game);
-        Client.onGameUpdate(global.setGameState);
+        Client.onGameUpdate((game: Game) => {
+            const currentGame = global.gameState();
+            if (currentGame?.inRound && !game.inRound) {
+                showRoundSummaryPopover(game.history[game.history.length - 1])
+            }
+            global.setGameState(_ => game);
+
+        });
         navigate(`/game/${gameID}`);
     }
 
