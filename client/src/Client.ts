@@ -26,7 +26,9 @@ class Client {
                 Client.disconnect(); // then close it
             }
 
-            Client.current = io();
+            Client.current = io({
+                reconnection: true
+            });
 
             Client.current.on('connect', () => {
                 console.log('Successfully connected!');

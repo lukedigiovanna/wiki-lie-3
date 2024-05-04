@@ -55,14 +55,20 @@ const GamePage: Component = () => {
         attemptRejoin();
     }
     
+    // window.onfocus = () => {
+    //     // when we come back to this tab we should reestablish the connection
+    //     // this handles a case such as a mobile client leaving their browser, 
+    //     // causing the socket to disconnect, and then when they come back
+    //     // we need to reestablish their connection
+    //     console.log("refresh");
+    //     if (!Client.isConnected) {
+    //         attemptRejoin();
+    //     }
+    // }
+
     window.onfocus = () => {
-        // when we come back to this tab we should reestablish the connection
-        // this handles a case such as a mobile client leaving their browser, 
-        // causing the socket to disconnect, and then when they come back
-        // we need to reestablish their connection
-        if (!Client.isConnected) {
-            attemptRejoin();
-        }
+        // showErrorPopover("rejoining");
+        attemptRejoin();
     }
 
     onCleanup(() => {
