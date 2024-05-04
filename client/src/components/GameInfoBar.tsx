@@ -61,17 +61,17 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
                             ourIndex() !== game().guesserIndex ? 
                             (
                                 !us()?.selectedArticle ?
-                                <p class="text-center font-bold text-red-600 drop-shadow-md text-[1.05rem]">
+                                <p class="text-center font-bold text-blue-500 drop-shadow-md text-[1.05rem]">
                                     Find an Article!
                                 </p>
                                 :
-                                <p class="text-center font-bold text-red-600 drop-shadow-md text-[1.05rem]">
+                                <p class="text-center font-bold text-blue-500 drop-shadow-md text-[1.05rem]">
                                     Waiting on Readers...
                                 </p>
                             )
                             :
                             (
-                                <p class="text-center font-bold text-red-600 drop-shadow-md text-[1.05rem]">
+                                <p class="text-center font-bold text-blue-500 drop-shadow-md text-[1.05rem]">
                                     Waiting on Readers...
                                 </p>
                             )

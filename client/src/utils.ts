@@ -1,16 +1,25 @@
 import { Game, Player } from "@shared/models";
 
 const adjectives = [
-    "quick", "bright", "creative", 
-    "sharp", "dynamic", "smooth", 
-    "strong", "gentle", "vibrant", 
-    "calm", "eager", "loyal"
+    "quick", "bright", "creative", "sharp", "dynamic", "smooth",
+    "strong", "gentle", "vibrant", "calm", "eager", "loyal", "fast", "slow",
+    "sleek", "witty", "brave", "silent", "cheerful",
+    "diligent", "fierce", "playful", "proud", "rustic", "serene",
+    "sturdy", "subtle", "wistful", "zesty", "agile", "breezy",
+    "crisp", "dreamy", "fiery", "gloomy", "humble", "jolly",
+    "kindly", "lively", "nimble", "opulent", "polished", "quaint",
+    "rugged", "sunny", "tactful", "unique", "vivid", "zealous"
 ];
+
 const nouns = [
-    "noodle", "wizard", "juggler", 
-    "pirate", "ninja", "squirrel", 
-    "dragon", "robot", "unicorn", 
-    "potato"
+    "noodle", "wizard", "juggler", "pirate", "ninja", "squirrel",
+    "dragon", "robot", "unicorn", "potato", "milk",
+    "wizard", "phoenix", "warrior", "castle", "ghost",
+    "owl", "witch", "vampire", "zombie", "elf", "goblin",
+    "tiger", "raven", "cheetah", "dolphin", "wolf", "fox",
+    "hawk", "lion", "mole", "octopus", "penguin", "quokka",
+    "raccoon", "sparrow", "turtle", "urchin", "vole", "walrus",
+    "yak", "zebra"
 ];
 
 function generateRandomUsername() {

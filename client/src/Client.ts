@@ -13,6 +13,10 @@ class Client {
         if (currentGame?.inRound && !game.inRound) {
             showRoundSummaryPopover(game.history[game.history.length - 1])
         }
+        const us = game.players.find(value => value.clientID === clientID);
+        if (us && !us.selectedArticle) {
+            global.setBlurArticle(false);
+        }
         global.setGameState(_ => game);
     };
 

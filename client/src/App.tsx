@@ -71,6 +71,7 @@ const App: Component = () => {
         <Route path="/game/:id" component={GamePage}/>
         <Route path="*" component={Redirect}/>
       </Router>
+      <div class="h-12"></div>
     </>
   );
 };

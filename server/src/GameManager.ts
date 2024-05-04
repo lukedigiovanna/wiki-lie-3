@@ -33,10 +33,9 @@ class GameManager {
 
     private sendGameUpdate(gameUID: string) {
         const game = this.games.get(gameUID);
-        if (!game) {
-            throw Error("")
+        if (game) {
+            this.io.to(gameUID).emit("game-update", game);
         }
-        this.io.to(gameUID).emit("game-update", game);
     }
 
     createGame() {
@@ -69,9 +68,16 @@ class GameManager {
             }
         }
 
+        for (const player of game.players) {
+            if (player.username.toLowerCase() === username.toLowerCase()) {
+                throw new AppError(ErrorCode.JOIN_FAILURE_USERNAME_ALREADY_TAKEN, "That username is already being used!");
+            }
+        }
+
         if (game.inRound) {
             throw new AppError(ErrorCode.JOIN_FAILURE_GAME_IN_ROUND, "This game is currently in a round, you can join after they finish");
         }
+
         
         // create a new player with this client
         const newPlayer: Player = {
@@ -124,6 +130,21 @@ class GameManager {
         for (const player of game.players) {
             if (clientID === player.clientID) {
                 player.isConnected = false;
+                if (player.isHost) {
+                    setTimeout(() => {
+                        if (!player.isConnected) {
+                            // find a new host
+                            for (let i = 0; i < game.players.length; i++) {
+                                if (game.players[i].isConnected) {
+                                    game.players[i].isHost = true;
+                                    player.isHost = false;
+                                    this.sendGameUpdate(gameID);
+                                    break;
+                                }
+                            }
+                        }
+                    }, 10000); // wait 10 seconds after host disconnects to assign a new host
+                }
                 this.sendGameUpdate(gameID);
                 return;
             }

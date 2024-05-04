@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createEffect } from "solid-js";
 
 import wikiLogo from "../assets/wiki-logo.png";
 
