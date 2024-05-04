@@ -1,37 +1,13 @@
-import { createSignal, onCleanup, type Component } from "solid-js";
-import { useSearchParams } from "@solidjs/router";
+import { createSignal, type Component } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Client } from "../Client";
 
 import global from "../global";
 import { generateRandomUsername } from "../utils";
-import { showErrorPopover, showRoundSummaryPopover } from "../popovers";
-import { ErrorCode, Game } from "@shared/models";
-
-function useJoinCode() {
-    function getCurrentSearchValue() {
-        return new URLSearchParams(window.location.search).get("join");
-    }
-
-    const [joinCode, setJoinCode] = createSignal<string | null>(getCurrentSearchValue());
-    
-    function updateJoinCode() {
-        setJoinCode(_ => getCurrentSearchValue())
-    }
-  
-    window.addEventListener('popstate', updateJoinCode);
-  
-    onCleanup(() => {
-      window.removeEventListener('popstate', updateJoinCode);
-    });
-  
-    return joinCode;
-  }
-  
+import { showErrorPopover } from "../popovers";
+import joinCode from "../joinCode";
 
 const HomePage: Component = () => {
-    const joinCode = useJoinCode();
-
     const navigate = useNavigate();
 
     const [username, setUsername] = createSignal("");

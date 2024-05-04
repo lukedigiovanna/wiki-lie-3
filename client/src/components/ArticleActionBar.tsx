@@ -15,7 +15,7 @@ const ArticleActionBar: Component<GameProperty> = (props: GameProperty) => {
     const articleHasBeenUsed = () => game().history.find(summary => summary.article === global.article()?.title) !== undefined;
 
     return (
-        <div class={`p-2 border ${hasSelectedArticle() ? "border-green-700" : "border-gray-300"} shadow rounded w-full space-x-4 flex flex-row justify-center sm:justify-start transition-all items-center`}>
+        <div class={`p-2 border ${hasSelectedArticle() ? "border-green-500" : "border-gray-300"} shadow rounded w-full space-x-4 flex flex-row justify-center sm:justify-start transition-all items-center`}>
             {
                 us()?.selectedArticle ?
                 <>
@@ -42,7 +42,7 @@ const ArticleActionBar: Component<GameProperty> = (props: GameProperty) => {
                     <button disabled={global.article() === null || articleHasBeenUsed()} class="action-button" onClick={async () => {
                         Client.chooseArticle(game().uid, clientID, global.article()?.title as string);
                     }}>
-                        Choose Article
+                        Choose This
                     </button>
                 </>
             }

@@ -9,7 +9,7 @@ function showErrorPopover(message: string) {
     setErrorMessage(_ => message);
 }
 
-const [showRoundSummary, setShowRoundSummary] = createSignal(true);
+const [showRoundSummary, setShowRoundSummary] = createSignal(false);
 const [roundSummary, setRoundSummary] = createSignal<RoundSummary>({
     article: "Test Article",
     reader: "readername",

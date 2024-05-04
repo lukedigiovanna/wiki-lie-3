@@ -8,7 +8,8 @@ import GameView from "../components/GameView";
 import global from "../global";
 import clientID from "../clientID";
 import wikipedia from "../wikipedia";
-import popovers, { showErrorPopover } from "../popovers";
+import { showErrorPopover } from "../popovers";
+import { setJoinCode } from "../joinCode";
 
 const GamePage: Component = () => {
     const { id } = useParams();
@@ -32,6 +33,7 @@ const GamePage: Component = () => {
                     showErrorPopover(err.message as string);
                 }
                 else if (err.code === ErrorCode.REJOIN_FAILURE_NEVER_CONNECTED) {
+                    setJoinCode(id);
                     navigate(`/?join=${id}`);
                 }
                 else {
@@ -54,17 +56,6 @@ const GamePage: Component = () => {
         // attempt to reconnect from this client
         attemptRejoin();
     }
-    
-    // window.onfocus = () => {
-    //     // when we come back to this tab we should reestablish the connection
-    //     // this handles a case such as a mobile client leaving their browser, 
-    //     // causing the socket to disconnect, and then when they come back
-    //     // we need to reestablish their connection
-    //     console.log("refresh");
-    //     if (!Client.isConnected) {
-    //         attemptRejoin();
-    //     }
-    // }
 
     window.onfocus = () => {
         attemptRejoin();
@@ -78,15 +69,21 @@ const GamePage: Component = () => {
     return <>
         {/* <div class="background"></div> */}
         <div class="block border-black w-full mx-auto lg:w-[75%] py-2 px-2 bg-[#eee] h-[100vh]">
-            <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4 cursor-pointer" onClick={() => {
-                const game = global.gameState();
-                if (game) {
-                    Client.leaveGame(game.uid);
-                }
-                navigate("/");
-            }}>
-                Wiki-Lie
-            </h1>
+            <div class="flex flex-row items-center">
+                <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4">
+                    Wiki-Lie
+                </h1>
+                <button class="rounded border border-red-700 ml-6 h-fit px-2 py-1 text-gray-900 text-[0.75rem] font-semibold bg-red-100 hover:bg-red-200 active:bg-red-400 disabled:opacity-50 disabled:hover:bg-red-100 disabled:active:bg-red-100 disabled:cursor-auto transition" onClick={() => {
+                    const game = global.gameState();
+                    if (game) {
+                        Client.leaveGame(game.uid);
+                    }
+                    navigate("/");
+                    setJoinCode(null);
+                }} disabled={global.gameState()?.inRound}>
+                    Abandon Game
+                </button>
+            </div>
             
             {
                 (() => {

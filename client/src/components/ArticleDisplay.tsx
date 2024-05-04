@@ -14,7 +14,7 @@ const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
     const selected = () => props.selected;
 
     return (
-        <div class={`${selected() ? "border-green-700" : "border-gray-300"} border shadow w-full h-[75vh] p-4 rounded overflow-y-scroll transition overflow-x-hidden cursor-default`}>
+        <div class={`${selected() ? "border-green-500" : "border-gray-300"} border shadow w-full h-[75vh] p-4 rounded overflow-y-scroll transition overflow-x-hidden cursor-default`}>
             <div class="pointer-events-none">
                 {
                     article() ?

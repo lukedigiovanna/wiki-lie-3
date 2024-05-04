@@ -11,6 +11,7 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
     const numPlayers = () => game().players.length;
     const readyPlayers = () => countReadyPlayers(game());
     const necessaryReadyPlayers = () => Math.max(2, numPlayers() - 1);
+    const us = () => game().players.find(value => value.clientID === clientID);
 
     const ourIndex = () => game().players.findIndex(value => value.clientID === clientID);
 
@@ -40,7 +41,7 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
                         Players: <span class={`${numPlayers() < 3 && "text-red-700"}`}>{numPlayers()}{game().players.length < 3 && "/3"}</span>
                     </p>
                     {
-                        readyPlayers() >= necessaryReadyPlayers() &&
+                        readyPlayers() >= necessaryReadyPlayers() ?
                         (
                             game().guesserIndex === ourIndex() ?
                             <button class="bg-gradient-to-r from-blue-500 to-teal-500 text-gray-200 font-bold py-1 px-3 rounded inline-flex items-center animate-gradientBG hover:shadow-lg hover:text-gray-50 transition active:text-blue-300"
@@ -54,6 +55,26 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
                             <p class="text-center font-bold text-blue-500 drop-shadow-md text-[1.05rem]">
                                 Waiting for Judge...
                             </p>
+                        )
+                        :
+                        (
+                            ourIndex() !== game().guesserIndex ? 
+                            (
+                                !us()?.selectedArticle ?
+                                <p class="text-center font-bold text-red-600 drop-shadow-md text-[1.05rem]">
+                                    Find an Article!
+                                </p>
+                                :
+                                <p class="text-center font-bold text-red-600 drop-shadow-md text-[1.05rem]">
+                                    Waiting on Readers...
+                                </p>
+                            )
+                            :
+                            (
+                                <p class="text-center font-bold text-red-600 drop-shadow-md text-[1.05rem]">
+                                    Waiting on Readers...
+                                </p>
+                            )
                         )
                     }
                     <p class="font-bold text-center">
