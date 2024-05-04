@@ -10,7 +10,7 @@ const Popover: Component<PopoverProps> = (props: PopoverProps) => {
     const visible = () => props.visible;
 
     return (
-        <div class={`${!visible() && "hidden"} absolute left-0 top-0 w-full h-[100vh] flex flex-row justify-center`}>
+        <div class={`${!visible() && "hidden"} fixed left-0 top-0 w-full h-[100vh] flex flex-row justify-center z-10`}>
             <div class="absolute bg-black opacity-50 w-full h-full left-0 top-0 z-40" onClick={props.close}>
             
             </div>

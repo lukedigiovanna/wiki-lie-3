@@ -67,7 +67,6 @@ const GamePage: Component = () => {
     // }
 
     window.onfocus = () => {
-        // showErrorPopover("rejoining");
         attemptRejoin();
     }
 
