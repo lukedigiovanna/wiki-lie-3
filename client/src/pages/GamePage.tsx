@@ -73,7 +73,12 @@ const GamePage: Component = () => {
                 <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4">
                     Wiki-Lie
                 </h1>
-                <button class="rounded border border-red-700 ml-6 h-fit px-2 py-1 text-gray-900 text-[0.75rem] font-semibold bg-red-100 hover:bg-red-200 active:bg-red-400 disabled:opacity-50 disabled:hover:bg-red-100 disabled:active:bg-red-100 disabled:cursor-auto transition" onClick={() => {
+                <button class="rounded border border-blue-700 ml-6 h-fit px-2 py-1 text-gray-900 text-[0.75rem] font-semibold bg-blue-100 hover:bg-blue-200 active:bg-blue-400 disabled:opacity-50 disabled:hover:bg-blue-100 disabled:active:bg-blue-100 disabled:cursor-auto transition" onClick={() => {
+                    navigator.clipboard.writeText(`http://wiki-lie.xyz/?join=${id}`);
+                }}>
+                    Copy Join Link
+                </button>
+                <button class="rounded border border-red-700 ml-3 h-fit px-2 py-1 text-gray-900 text-[0.75rem] font-semibold bg-red-100 hover:bg-red-200 active:bg-red-400 disabled:opacity-50 disabled:hover:bg-red-100 disabled:active:bg-red-100 disabled:cursor-auto transition" onClick={() => {
                     const game = global.gameState();
                     if (game) {
                         Client.leaveGame(game.uid);

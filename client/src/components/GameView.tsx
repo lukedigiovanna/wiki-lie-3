@@ -25,7 +25,7 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
         <GameInfoBar game={game()} />
 
 
-        <div class="flex flex-col sm:flex-row">
+        <div class="flex flex-col sm:flex-row ">
             <PlayerList game={game()} />
 
             <div class="sm:ml-4 flex flex-col w-full space-y-4">
@@ -68,7 +68,6 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
         
                         <ArticleDisplay article={store.article()} blur={global.blurArticle()} selected={hasSelectedArticle()} />
                     </>
-
                 }
             </div>
         </div>
