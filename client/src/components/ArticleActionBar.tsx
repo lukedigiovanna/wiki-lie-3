@@ -5,6 +5,7 @@ import { Client } from "../Client";
 import clientID from "../clientID";
 import global from "../global";
 import wikipedia from "../wikipedia";
+import { resetArticleScroll } from "./ArticleDisplay";
 
 const ArticleActionBar: Component<GameProperty> = (props: GameProperty) => {
     const game = () => props.game;
@@ -34,8 +35,11 @@ const ArticleActionBar: Component<GameProperty> = (props: GameProperty) => {
                 :
                 <>
                     <button class="action-button" onClick={async () => {
+                        resetArticleScroll();
+                        global.setLoadingArticle(_ => true);
                         const randomArticle = await wikipedia.getRandomArticle();
                         global.setArticle(_ => randomArticle);
+                        global.setLoadingArticle(_ => false);
                     }}>
                         New Article
                     </button>

@@ -27,7 +27,7 @@ const GameInfoBar: Component<GameProperty> = (props: GameProperty) => {
     });
 
     return (
-        <div class="flex-1 border border-gray-400 bg-gray-200 shadow rounded p-2 flex flex-row justify-center items-center space-x-8 sm:space-x-16 mb-4 w-full">
+        <div class="flex-1 border border-gray-400 bg-gray-200 shadow rounded p-2 flex flex-row justify-center items-center space-x-4 sm:space-x-16 mb-4 w-full">
             {
                 game().inRound ?
                 <>

@@ -9,6 +9,26 @@ class GameManager {
 
     constructor(io: SocketServer) {
         this.io = io;
+
+        setInterval(() => {
+            const numGames = this.games.size;
+            if (numGames > 0) {
+                console.log(numGames + " active games");
+            }
+            for (const [id, game] of this.games) {
+                let hasPlayer = false;
+                for (const player of game.players) {
+                    if (player.isConnected) {
+                        hasPlayer = true;
+                        break;
+                    }
+                }
+                if (!hasPlayer) {
+                    this.games.delete(id);
+                    console.log("deleted dead game: " + id);
+                }
+            }
+        }, 30000 * 1000); // every 30 seconds display a report and get rid of dead games
     }
 
     private recalculatePlayerRanks(game: Game) {

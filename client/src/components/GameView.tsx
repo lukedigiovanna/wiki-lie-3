@@ -66,7 +66,7 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
                     <>
                         <ArticleActionBar game={game()} />
         
-                        <ArticleDisplay article={store.article()} blur={global.blurArticle()} selected={hasSelectedArticle()} />
+                        <ArticleDisplay article={store.article()} blur={global.blurArticle()} selected={hasSelectedArticle()} loading={global.loadingArticle()} />
                     </>
                 }
             </div>

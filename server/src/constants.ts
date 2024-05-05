@@ -1,6 +1,6 @@
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789';
-const CODE_LENGTH = 6;
+const CODE_LENGTH = 4;
 function generateGameUID() {
     let s = "";
     for (let i = 0; i < CODE_LENGTH; i++) {

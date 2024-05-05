@@ -14,6 +14,7 @@ interface ArticleProperty {
     article: Article | null;
     blur: boolean;
     selected: boolean;
+    loading: boolean;
 }
 
 export type { Article, GameProperty, ArticleProperty };

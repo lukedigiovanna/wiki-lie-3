@@ -68,26 +68,16 @@ const GamePage: Component = () => {
 
     return <>
         {/* <div class="background"></div> */}
-        <div class="block border-black w-full mx-auto lg:w-[75%] py-2 px-2 bg-[#eee] h-[100vh]">
-            <div class="flex flex-row items-center">
-                <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4">
-                    Wiki-Lie
-                </h1>
-                <button class="rounded border border-blue-700 ml-6 h-fit px-2 py-1 text-gray-900 text-[0.75rem] font-semibold bg-blue-100 hover:bg-blue-200 active:bg-blue-400 disabled:opacity-50 disabled:hover:bg-blue-100 disabled:active:bg-blue-100 disabled:cursor-auto transition" onClick={() => {
-                    navigator.clipboard.writeText(`http://wiki-lie.xyz/?join=${id}`);
-                }}>
-                    Copy Join Link
-                </button>
-                <button class="rounded border border-red-700 ml-3 h-fit px-2 py-1 text-gray-900 text-[0.75rem] font-semibold bg-red-100 hover:bg-red-200 active:bg-red-400 disabled:opacity-50 disabled:hover:bg-red-100 disabled:active:bg-red-100 disabled:cursor-auto transition" onClick={() => {
-                    const game = global.gameState();
-                    if (game) {
-                        Client.leaveGame(game.uid);
-                    }
+        <div class="block border-black w-full mx-auto lg:w-[75%] py-2 px-2 h-[100vh]">
+            <div class="flex flex-row items-center w-full">
+                <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4 cursor-pointer" onClick={() => {
                     navigate("/");
-                    setJoinCode(null);
-                }} disabled={global.gameState()?.inRound}>
-                    Abandon Game
-                </button>
+                }}>
+                    Wiki-Lie /
+                </h1>
+                <p class="text-[1rem] font-semibold text-gray-600 ml-3">
+                    Join Code: <span class="rounded bg-gray-300 px-2 py-1 text-gray-800 text-[1.05rem]">{id}</span>
+                </p>
             </div>
             
             {

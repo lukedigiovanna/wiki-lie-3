@@ -1,4 +1,4 @@
-import { Component, createEffect } from "solid-js";
+import { Component, createEffect, createSignal, onMount } from "solid-js";
 
 import wikiLogo from "../assets/wiki-logo.png";
 
@@ -8,15 +8,39 @@ import { Client } from "../Client";
 
 import likeIcon from "../assets/like.png";
 
+let articleScrollPos = 0;
+
+function resetArticleScroll() {
+    articleScrollPos = 0;
+}
+
 const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
     const article = () => props.article;
     const blur = () => props.blur;
     const selected = () => props.selected;
+    const loading = () => props.loading;
 
     return (
-        <div class={`${selected() ? "border-green-500" : "border-gray-300"} border shadow w-full h-[75vh] p-4 rounded overflow-y-scroll transition overflow-x-hidden cursor-default`}>
+        <div ref={div => { 
+            function setScroll() {
+                div.scrollTop = articleScrollPos;
+                if (div.scrollTop !== articleScrollPos) {
+                    setTimeout(setScroll, 1);
+                }
+            }
+            setScroll();
+        }}
+
+        onScroll={e=> {
+            articleScrollPos = e.target.scrollTop;
+        }} class={`${selected() ? "border-green-500" : "border-gray-300"} border shadow w-full h-[75vh] p-4 rounded overflow-y-scroll transition overflow-x-hidden cursor-default`}>
             <div class="pointer-events-none">
                 {
+                    loading() ?
+                    <div class="flex flex-row h-full w-full items-center justify-center">
+                        <div class="lds-ripple"><div></div><div></div></div>
+                    </div>
+                    :
                     article() ?
                     <div class={`${blur() && "blur-lg"} transition relative`}>
                         <div class="absolute right-0 top-0 flex space-x-2">
@@ -27,7 +51,7 @@ const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
                             </button>
                         </div>
                         <ArticleTitle title={article()?.title as string} />
-                        <div innerHTML={article()?.html} class="overflow-y-scroll"></div>
+                        <div innerHTML={article()?.html}></div>
                     </div>
                     :
                     <div>
@@ -43,3 +67,5 @@ const ArticleDisplay: Component<ArticleProperty> = (props: ArticleProperty) => {
 }
 
 export default ArticleDisplay;
+
+export { resetArticleScroll };
