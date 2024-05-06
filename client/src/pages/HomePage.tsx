@@ -4,13 +4,18 @@ import { Client } from "../Client";
 
 import global from "../global";
 import { generateRandomUsername } from "../utils";
-import { showErrorPopover } from "../popovers";
 import joinCode from "../joinCode";
+import { showErrorPopover } from "../popovers";
+
+type Option = "host" | "join";
 
 const HomePage: Component = () => {
     const navigate = useNavigate();
 
     const [username, setUsername] = createSignal("");
+    const [currentJoinCode, setCurrentJoinCode] = createSignal(joinCode());
+
+    const [option, setOption] = createSignal<Option>(joinCode() ? "join" : "host");
 
     const joinGame = async (gameID: string) => {
         const game = await Client.joinGame(gameID, username().length === 0 ? generateRandomUsername() : username());
@@ -27,51 +32,80 @@ const HomePage: Component = () => {
         </h2>
 
         <div class="flex justify-center">
-            <div class="max-w-sm mt-8 w-[90%] py-4 flex flex-col items-center border border-gray-400 rounded">
-                <input class="rounded px-2 py-1 border border-gray-400 outline-none text-gray-900 shadow-lg shadow-gray-300 focus:border-teal-950 transition" 
-                    placeholder="Enter your name" 
-                    onInput={e => {
-                        const input = e.target.value;
-                        if (input.length > 15 ||  !input.match(/^[a-zA-Z0-9]*$/)) {
-                            e.target.value = input.substring(0, input.length - 1);
-                            e.target.classList.add("input-error");
-                            setTimeout(() => { e.target.classList.remove("input-error") }, 200);
-                        }
-                        setUsername(e.target.value);
-                    }} 
-                />
-
-                <div class="flex justify-center mt-4 space-x-6">
-                    {joinCode() ? 
-                        <button class="menu-button" onClick={async () => {
-                            try {
-                                // make a connection to the websocket and then create a game
-                                await Client.connect();
-                                await joinGame(joinCode() as string);
-                            }
-                            catch (e: any) {
-                                showErrorPopover(e.message as string);
-                                console.log("Error ocurred", e);
-                            }
-                        }}>
-                            Join
-                        </button>
-                    :   
-                        <button class="menu-button" onClick={async () => {
-                            try {
-                                // make a connection to the websocket and then create a game
-                                await Client.connect();
-                                const uid = await Client.createGame();
-                                await joinGame(uid);
-                            }
-                            catch (e) {
-                                console.log("Error ocurred", e);
-                            }
-                        }}>
-                            Host
-                        </button>
-                    }
+            <div class="max-w-sm mt-8 w-[90%] py-4 flex flex-col items-center border border-gray-400 rounded space-y-6">
+                <div class="flex flex-row space-x-14">
+                    <button class={`${option() === "host" && "font-bold text-gray-900 border-b border-gray-600"} text-gray-500 ${option() !== "host" && "hover:text-gray-600"} text-[1.05rem] drop-shadow transition`} onClick={() => {
+                        setOption("host");
+                    }}>
+                        Host Game
+                    </button>
+                    <button class={`${option() === "join" && "font-bold text-gray-900 border-b border-gray-600"} text-gray-500 ${option() !== "join" && "hover:text-gray-600"} text-[1.05rem] drop-shadow transition`} onClick={() => {
+                        setOption("join");
+                    }}>
+                        Join Game
+                    </button>
                 </div>
+                <div class="space-y-2 flex flex-col items-center">
+                    {
+                        option() === "join" &&
+                        <input class="rounded px-2 py-1 border border-gray-400 outline-none text-gray-900 shadow-lg shadow-gray-300 focus:border-teal-950 transition"  
+                            placeholder="Join code"
+                            onInput={e => {
+                                const input = e.target.value.toUpperCase();
+                                e.target.value = input;
+                                if (input.length > 4 ||  !input.match(/^[A-Z0-9]*$/)) {
+                                    e.target.value = input.substring(0, Math.min(4, input.length - 1));
+                                    e.target.classList.add("input-error");
+                                    setTimeout(() => { e.target.classList.remove("input-error") }, 200);
+                                }
+                                setCurrentJoinCode(e.target.value);
+                            }}
+                            value={currentJoinCode() || ""}
+                        />
+                    }
+                    <input class="rounded px-2 py-1 border border-gray-400 outline-none text-gray-900 shadow-lg shadow-gray-300 focus:border-teal-950 transition" 
+                        placeholder="Enter your name" 
+                        onInput={e => {
+                            const input = e.target.value;
+                            if (input.length > 15 ||  !input.match(/^[a-zA-Z0-9]*$/)) {
+                                e.target.value = input.substring(0, Math.min(15, input.length - 1));
+                                e.target.classList.add("input-error");
+                                setTimeout(() => { e.target.classList.remove("input-error") }, 200);
+                            }
+                            setUsername(e.target.value);
+                        }} 
+                    />
+                </div>
+                {
+                    option() === "join" ?
+                    <button class="menu-button" disabled={!currentJoinCode() || currentJoinCode()?.length as number < 4} onClick={async () => {
+                        try {
+                            // make a connection to the websocket and then create a game
+                            await Client.connect();
+                            await joinGame(currentJoinCode() as string);
+                        }
+                        catch (e: any) {
+                            showErrorPopover(e.message as string);
+                            console.log("Error ocurred", e);
+                        }
+                    }}>
+                        Join
+                    </button>
+                    :
+                    <button class="menu-button" onClick={async () => {
+                        try {
+                            // make a connection to the websocket and then create a game
+                            await Client.connect();
+                            const uid = await Client.createGame();
+                            await joinGame(uid);
+                        }
+                        catch (e) {
+                            console.log("Error ocurred", e);
+                        }
+                    }}>
+                        Host
+                    </button>
+                }
             </div>
         </div>
 
@@ -85,7 +119,7 @@ const HomePage: Component = () => {
                         A player is chosen as the judge
                     </li>
                     <li>
-                        Each other player finds a niche Wikipedia article
+                        Each other player finds an obscure Wikipedia article
                     </li>
                     <li>
                         One of those articles is chosen at random

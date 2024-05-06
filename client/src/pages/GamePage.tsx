@@ -71,6 +71,7 @@ const GamePage: Component = () => {
         <div class="block border-black w-full mx-auto lg:w-[75%] py-2 px-2 h-[100vh]">
             <div class="flex flex-row items-center w-full">
                 <h1 class="text-center sm:text-left text-[2.8rem] font-bold font-[Libertine] ml-4 cursor-pointer" onClick={() => {
+                    setJoinCode("");
                     navigate("/");
                 }}>
                     Wiki-Lie /

@@ -17,7 +17,21 @@ const GameView: Component<GameProperty> = (props: GameProperty) => {
     const us = () => game().players.find(value => value.clientID === clientID);
     const hasSelectedArticle = () => us()?.selectedArticle !== null;
 
-    const currentArticleTitle = () => game().players[game().currentArticlePlayerIndex].selectedArticle;
+    const currentArticleTitle = () => {
+        const raw = game().players[game().currentArticlePlayerIndex].selectedArticle;
+        if (raw) {
+            const pIdx = raw.indexOf("(");
+            if (pIdx < 0) {
+                return raw;
+            }
+            else {
+                return raw.substring(0, pIdx - 1);
+            }
+        }
+        else {
+            return null;
+        }
+    }
 
     const ourIndex = () => game().players.findIndex(value => value.clientID === clientID);
 
