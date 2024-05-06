@@ -57,12 +57,17 @@ const GamePage: Component = () => {
         attemptRejoin();
     }
 
-    window.onfocus = () => {
-        attemptRejoin();
+    document.onvisibilitychange = () => {
+        if (document.visibilityState === "visible") {
+            attemptRejoin();
+        }
+        else {
+            Client.disconnect();
+        }
     }
 
     onCleanup(() => {
-        window.onfocus = () => {};
+        document.onvisibilitychange = () => {};
         Client.disconnect();
     });
 
