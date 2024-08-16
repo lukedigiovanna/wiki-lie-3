@@ -2,9 +2,6 @@
 
 This is a mono-repo containing a Solid.js frontend and Express/Socket.io backend for running Wiki-Lie.
 
-The backend interfaces with a redis cache to keep track of game state and in turn makes the entire 
-application stateless.
-
 ## History
 
 Wiki-lie is a game inspired from the Tom Scott web series "Two of these people are lying", you can view all their episodes
@@ -56,9 +53,3 @@ From Server:
 1. `game-state`: `{<game-info>}`
    1. Sends an entire object representing the current state of the game a client is in
    2. Includes all relevant game information (i.e. game settings, whether the game is started, chosen article, host, players, etc.)
-
-### Redis
-
-The actual state of the game is stored in a redis cache. This enables the server to be stateless and scalable.
-
-Redis has sub-millisecond access, so this works fine.
