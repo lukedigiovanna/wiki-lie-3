@@ -1,9 +1,0 @@
-.VSCodeCounter
-
-node_modules
-
-pnpm-lock.yaml
-
-*/.env
-
-public_html
